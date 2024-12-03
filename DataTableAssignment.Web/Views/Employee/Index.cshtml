@@ -26,13 +26,33 @@
 	</tfoot>
 </table>
 
-@* <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet"/> *@
+<style>
+	.floatRight {
+		float: right;
+	}
+
+	.clear {
+		clear: both;
+	}
+</style>
+
+@* <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet"/>  *@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
-<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" />
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" /> 
+<link href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css  " rel="stylesheet" />
 
 @section Scripts {
-	<script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+
+
 	<script>
 		$(document).ready(function () {
 			var empTable=$('#employeeTable').DataTable({
@@ -48,6 +68,9 @@
 					{ "data": "age", "name": "age" },
 					{ "data": "salary", "name": "salary"}
 				],
+				"topEnd": 'search',
+				"dom":'<"floatRight"B><"clear">l<"floatRight"f>rtip',
+				"buttons":['csv'],
 				"fnInitComplete": function (oSettings, json) {
 					addSearchControl(json);
 				}

@@ -32,3 +32,4 @@ D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\obj\Debug
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\obj\Debug\net8.0\DataTableAssignment.Web.pdb
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\obj\Debug\net8.0\DataTableAssignment.Web.genruntimeconfig.cache
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\obj\Debug\net8.0\ref\DataTableAssignment.Web.dll
+D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\obj\Debug\net8.0\DataTableAssignment.Web.sourcelink.json

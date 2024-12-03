@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DataTableAssignment.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3ac64e6cc2f26ca9049d0838aecd0748f953883c")]
 [assembly: System.Reflection.AssemblyProductAttribute("DataTableAssignment.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DataTableAssignment.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
