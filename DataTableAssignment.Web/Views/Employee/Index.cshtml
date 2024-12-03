@@ -34,6 +34,7 @@
 	.clear {
 		clear: both;
 	}
+
 </style>
 
 @* <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet"/>  *@
@@ -69,7 +70,7 @@
 					{ "data": "salary", "name": "salary"}
 				],
 				"topEnd": 'search',
-				"dom":'<"floatRight"B><"clear">l<"floatRight"f>rtip',
+				"dom":'<"floatRight"B><"clear"><"floatRight"l><"clear"><"floatRight"f>rpti',
 				"buttons":['csv'],
 				"fnInitComplete": function (oSettings, json) {
 					addSearchControl(json);
