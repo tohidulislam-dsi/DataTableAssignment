@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "DataTableAssignment.API\\DataTableAssignment.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "DataTableAssignment.Web\\DataTableAssignment.Web.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
