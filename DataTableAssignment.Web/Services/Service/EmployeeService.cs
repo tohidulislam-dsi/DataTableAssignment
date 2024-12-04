@@ -47,11 +47,6 @@ public class EmployeeService : IEmployeeService
             }
         }
 
-        
-       
-
-       
-       
 
         return empList;
     }
