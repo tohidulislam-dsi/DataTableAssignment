@@ -28,7 +28,7 @@ namespace DataTableAssignment.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetEmployeeList()
+        public async Task<IActionResult> GetEmployeeList()
         {
             int start = Convert.ToInt32(Request.Form["start"]);
             int length = Convert.ToInt32(Request.Form["length"]);
