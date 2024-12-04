@@ -1,8 +1,14 @@
+using DataTableAssignment.Web.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
+
+builder.Services.AddDbContext<DataTableAssignmentDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DataTableASsignmentConnectionString")));
 
 var app = builder.Build();
 
@@ -23,6 +29,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Employee}/{action=Index}/{id?}");
 
 app.Run();

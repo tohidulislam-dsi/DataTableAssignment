@@ -171,3 +171,5 @@ D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.API\obj\Debug
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.API\obj\Debug\net8.0\DataTableAssignment.API.pdb
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.API\obj\Debug\net8.0\DataTableAssignment.API.genruntimeconfig.cache
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.API\obj\Debug\net8.0\ref\DataTableAssignment.API.dll
+D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.API\obj\Debug\net8.0\DataTableAssignment.API.sourcelink.json
+D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.API\bin\Debug\net8.0\System.Linq.Dynamic.Core.dll
