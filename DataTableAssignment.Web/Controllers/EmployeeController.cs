@@ -47,7 +47,7 @@ namespace DataTableAssignment.Web.Controllers
                 Where(x => x.Name.ToLower().Contains(globalSearchValue.ToLower()) || x.Position.ToLower().Contains(globalSearchValue.ToLower()) || x.Office.ToLower().Contains(globalSearchValue.ToLower()) || x.Age.ToString().Contains(globalSearchValue.ToLower()) || x.Salary.ToString().Contains(globalSearchValue.ToLower())).ToList();
             }
 
-            //custom filtering
+            //Per Column filter
             if (!string.IsNullOrEmpty(Request.Form["columns[0][search][value]"]))
                 empList = empList.Where(x => x.Name.ToLower().Contains(Request.Form["columns[0][search][value]"].ToString().ToLower())).ToList();
             if (!string.IsNullOrEmpty(Request.Form["columns[1][search][value]"]))
