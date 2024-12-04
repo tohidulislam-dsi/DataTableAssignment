@@ -1,6 +1,8 @@
-﻿namespace DataTableAssignment.Web.Models.Dto
+﻿using DataTableAssignment.Web.Models.Dto;
+
+namespace DataTableAssignment.Web.Models.Response
 {
-    public class EmployeeFilterResponseDto
+    public class EmployeeFilterResponseModel
     {
         public int draw { get; set; }
         public int recordsTotal { get; set; }

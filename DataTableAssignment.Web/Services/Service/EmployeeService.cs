@@ -13,7 +13,7 @@ public class EmployeeService : IEmployeeService
         this.mapper = mapper;
     }
 
-    public async Task<IEnumerable<EmployeeDto>> GetFilteredEmployeesAsync(DataTableRequestDto requestData)
+    public async Task<IEnumerable<EmployeeDto>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
     {
         var employeeList = await employeeRepository.GetAllAsync();
         var empList = mapper.Map<IEnumerable<EmployeeDto>>(employeeList);

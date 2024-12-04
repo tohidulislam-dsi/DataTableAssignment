@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Buffers;
 using Azure.Core;
+using DataTableAssignment.Web.Models.Response;
 
 namespace DataTableAssignment.Web.Controllers
 {
@@ -34,7 +35,7 @@ namespace DataTableAssignment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetEmployeeList(DataTableRequestDto requestData)
+        public async Task<IActionResult> GetEmployeeList(EmployeeListRequestModel requestData)
         {
             var employees = await employeeService.GetFilteredEmployeesAsync(requestData);
 
@@ -53,7 +54,7 @@ namespace DataTableAssignment.Web.Controllers
             //paging
             employees = employees.Skip(start).Take(length).ToList();
 
-            var response = new EmployeeFilterResponseDto()
+            var response = new EmployeeFilterResponseModel()
 
             {
                 draw = requestData.Draw,

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DataTableAssignment.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+45d203266b4aff6bb7db6d3133814993d44bde2b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+425e5d8b576644dd10d506da062f5303cd336b8d")]
 [assembly: System.Reflection.AssemblyProductAttribute("DataTableAssignment.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DataTableAssignment.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

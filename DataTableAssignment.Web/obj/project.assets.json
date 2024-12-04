@@ -4842,23 +4842,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Tohidul\\.nuget\\packages\\": {},
+    "C:\\Users\\tohid\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\DataTableAssignment.Web.csproj",
+      "projectUniqueName": "D:\\projects\\DSi\\DataTableAssignment\\DataTableAssignment\\DataTableAssignment.Web\\DataTableAssignment.Web.csproj",
       "projectName": "DataTableAssignment.Web",
-      "projectPath": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\DataTableAssignment.Web.csproj",
-      "packagesPath": "C:\\Users\\Tohidul\\.nuget\\packages\\",
-      "outputPath": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\",
+      "projectPath": "D:\\projects\\DSi\\DataTableAssignment\\DataTableAssignment\\DataTableAssignment.Web\\DataTableAssignment.Web.csproj",
+      "packagesPath": "C:\\Users\\tohid\\.nuget\\packages\\",
+      "outputPath": "D:\\projects\\DSi\\DataTableAssignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Tohidul\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\tohid\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
