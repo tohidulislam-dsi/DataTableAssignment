@@ -21,27 +21,50 @@
 </table>
 
 
-@* <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet"/>  *@
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
-@* <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" />  *@
-@* <link href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css" rel="stylesheet" /> *@
-@* <link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css  " rel="stylesheet" /> *@
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" /> 
+<link href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css  " rel="stylesheet" />
 <link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css" rel="stylesheet" />
-@* <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" /> *@
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" />
+
+
+<style>
+	.floatRight {
+		float: right;
+	}
+	.clear {
+		clear: both;
+	}
+
+	table.dataTable {
+		margin-top: 2em !important;
+	}
+
+	.dataTables_wrapper {
+		padding-bottom: 50px; /* Add padding to the bottom to avoid overlap with footer */
+	}
+</style>
+
+
 @section Scripts {
 	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
-	@* <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script> *@
-	@* <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script> *@
-	@* <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> *@
-	@* <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script> *@
-	@* <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script> *@
-	@* <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script> *@
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
 	<script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
 
 	<script>
 		$(document).ready(function () {
@@ -66,6 +89,7 @@
 				},
 				"topEnd": 'search',
 				"dom":'<"floatRight"B><"clear"><"floatRight"l><"clear"><"floatRight"f>rpti',
+				// "dom":'Blfrpti',
 				"buttons":['csv'],
 				"fnInitComplete": function (oSettings, json) {
 					addSearchControl(json);
@@ -74,8 +98,8 @@
 			function addSearchControl(json) {
 				 $("#searchTable thead").append($("#employeeTable thead tr:first").clone());
 				 $("#searchTable thead tr:eq(0) th").each(function (index) {
-					 
-					$(this).replaceWith('<th><input type="text" placeholder=Search></input></th>');
+
+					$(this).replaceWith('<th><input type="text" placeholder="Search ' + $(this).text() + '"></input></th>');
 					var searchControl = $("#searchTable thead tr:eq(0) th:eq(" + index + ") input");
 					searchControl.on('keyup', function () {
 						empTable.column(index).search(searchControl.val()).draw();

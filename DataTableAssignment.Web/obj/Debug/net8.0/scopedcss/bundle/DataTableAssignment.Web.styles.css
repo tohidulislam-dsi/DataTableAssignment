@@ -41,9 +41,21 @@ button.accept-policy[b-55zefu31ew] {
 }
 
 .footer[b-55zefu31ew] {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height:10px;
+    white-space: nowrap;
+    line-height: 30px;
+    position: static;
+}
+#footer[b-55zefu31ew] {
+    bottom: 0;
+    color: #707070;
+    height: 2em;
+    left: 0;
+    position: fixed; /* OldProperty */
+    position: static; /* Updated Property */
+    font-size: small;
+    width: 100%;
 }

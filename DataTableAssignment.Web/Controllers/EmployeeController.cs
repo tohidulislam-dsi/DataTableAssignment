@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using DataTableAssignment.Web.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Buffers;
 
 namespace DataTableAssignment.Web.Controllers
 {
@@ -31,12 +32,21 @@ namespace DataTableAssignment.Web.Controllers
         {
             int start = Convert.ToInt32(Request.Form["start"]);
             int length = Convert.ToInt32(Request.Form["length"]);
+            string globalSearchValue = Request.Form["search[value]"];
             string sortColumnName = Request.Form["columns[" + Request.Form["order[0][column]"] + "][name]"];
             string sortDirection = Request.Form["order[0][dir]"];
             List<EmployeeDto> response = new List<EmployeeDto>();
 
             var empList = dbContext.Employees.ToList();
             int totalrows = empList.Count;
+
+            //Global search filter
+            if (!string.IsNullOrEmpty(globalSearchValue))
+            {
+                empList = empList.
+                Where(x => x.Name.ToLower().Contains(globalSearchValue.ToLower()) || x.Position.ToLower().Contains(globalSearchValue.ToLower()) || x.Office.ToLower().Contains(globalSearchValue.ToLower()) || x.Age.ToString().Contains(globalSearchValue.ToLower()) || x.Salary.ToString().Contains(globalSearchValue.ToLower())).ToList();
+            }
+
             //custom filtering
             if (!string.IsNullOrEmpty(Request.Form["columns[0][search][value]"]))
                 empList = empList.Where(x => x.Name.ToLower().Contains(Request.Form["columns[0][search][value]"].ToString().ToLower())).ToList();
@@ -55,7 +65,9 @@ namespace DataTableAssignment.Web.Controllers
 
             //paging
             empList = empList.Skip(start).Take(length).ToList();
-            var jsonResponse = new JsonResult(new { data = empList });
+
+             
+            var jsonResponse = new JsonResult(new { data = empList, draw = Request.Form["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering });
             return jsonResponse;
         }
     }

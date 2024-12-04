@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "7rwt5U1cPF29p3rOgxlF2rNYwvPHi2tasgOAtzpTssw=",
+  "Hash": "wbU088xAKwCmjQ7Vo7N9TlWsQ1ViTRWyB9/q+jaWlzU=",
   "Source": "DataTableAssignment.Web",
   "BasePath": "_content/DataTableAssignment.Web",
   "Mode": "Default",
@@ -31,8 +31,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
-      "Fingerprint": "2cfmmn12z1",
-      "Integrity": "3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M=",
+      "Fingerprint": "ojfzqir576",
+      "Integrity": "dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\Debug\\net8.0\\scopedcss\\bundle\\DataTableAssignment.Web.styles.css"
@@ -52,8 +52,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
-      "Fingerprint": "2cfmmn12z1",
-      "Integrity": "3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M=",
+      "Fingerprint": "ojfzqir576",
+      "Integrity": "dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\DataTableAssignment.Web.bundle.scp.css"
@@ -1403,96 +1403,6 @@
       ]
     },
     {
-      "Route": "DataTableAssignment.Web.2cfmmn12z1.bundle.scp.css",
-      "AssetFile": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\DataTableAssignment.Web.bundle.scp.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1141"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 04 Dec 2024 08:08:31 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "2cfmmn12z1"
-        },
-        {
-          "Name": "label",
-          "Value": "DataTableAssignment.Web.bundle.scp.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M="
-        }
-      ]
-    },
-    {
-      "Route": "DataTableAssignment.Web.2cfmmn12z1.styles.css",
-      "AssetFile": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\Debug\\net8.0\\scopedcss\\bundle\\DataTableAssignment.Web.styles.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1141"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 04 Dec 2024 08:08:31 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "2cfmmn12z1"
-        },
-        {
-          "Name": "label",
-          "Value": "DataTableAssignment.Web.styles.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M="
-        }
-      ]
-    },
-    {
       "Route": "DataTableAssignment.Web.bundle.scp.css",
       "AssetFile": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\DataTableAssignment.Web.bundle.scp.css",
       "Selectors": [],
@@ -1503,7 +1413,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1141"
+          "Value": "1416"
         },
         {
           "Name": "Content-Type",
@@ -1511,11 +1421,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M=\""
+          "Value": "\"dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Dec 2024 08:08:31 GMT"
+          "Value": "Wed, 04 Dec 2024 09:15:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1525,7 +1435,97 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M="
+          "Value": "sha256-dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY="
+        }
+      ]
+    },
+    {
+      "Route": "DataTableAssignment.Web.ojfzqir576.bundle.scp.css",
+      "AssetFile": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\DataTableAssignment.Web.bundle.scp.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1416"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 04 Dec 2024 09:15:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ojfzqir576"
+        },
+        {
+          "Name": "label",
+          "Value": "DataTableAssignment.Web.bundle.scp.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY="
+        }
+      ]
+    },
+    {
+      "Route": "DataTableAssignment.Web.ojfzqir576.styles.css",
+      "AssetFile": "D:\\dsi_projects\\Assignment\\DataTableAssignment\\DataTableAssignment.Web\\obj\\Debug\\net8.0\\scopedcss\\bundle\\DataTableAssignment.Web.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1416"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 04 Dec 2024 09:15:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ojfzqir576"
+        },
+        {
+          "Name": "label",
+          "Value": "DataTableAssignment.Web.styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY="
         }
       ]
     },
@@ -1540,7 +1540,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1141"
+          "Value": "1416"
         },
         {
           "Name": "Content-Type",
@@ -1548,11 +1548,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M=\""
+          "Value": "\"dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Dec 2024 08:08:31 GMT"
+          "Value": "Wed, 04 Dec 2024 09:15:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1562,7 +1562,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-3uZEMZwAx2KNSFRsuEMAYVrhYZXyquxt82joSEgR06M="
+          "Value": "sha256-dAugYSzpKcgQeC4lp+A769DVuUyMeXORhV6bL4Ui2QY="
         }
       ]
     },
