@@ -16,6 +16,7 @@ D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\bin\Debug
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\bin\Debug\net8.0\DataTableAssignment.Web.runtimeconfig.json
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\bin\Debug\net8.0\DataTableAssignment.Web.dll
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\bin\Debug\net8.0\DataTableAssignment.Web.pdb
+D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\bin\Debug\net8.0\AutoMapper.dll
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\bin\Debug\net8.0\Azure.Core.dll
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\bin\Debug\net8.0\Azure.Identity.dll
 D:\dsi_projects\Assignment\DataTableAssignment\DataTableAssignment.Web\bin\Debug\net8.0\Humanizer.dll

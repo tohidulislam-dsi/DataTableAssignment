@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "wbU088xAKwCmjQ7Vo7N9TlWsQ1ViTRWyB9/q+jaWlzU=",
+  "Hash": "nmcqEK3tDD3sJjWVEiwJOBhYlExToRL3/1XoSnSJYbA=",
   "Source": "DataTableAssignment.Web",
   "BasePath": "_content/DataTableAssignment.Web",
   "Mode": "Default",
@@ -1425,7 +1425,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Dec 2024 09:15:30 GMT"
+          "Value": "Wed, 04 Dec 2024 14:35:22 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1462,7 +1462,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Dec 2024 09:15:30 GMT"
+          "Value": "Wed, 04 Dec 2024 14:35:22 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1507,7 +1507,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Dec 2024 09:15:30 GMT"
+          "Value": "Wed, 04 Dec 2024 14:35:22 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1552,7 +1552,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Dec 2024 09:15:30 GMT"
+          "Value": "Wed, 04 Dec 2024 14:35:22 GMT"
         },
         {
           "Name": "Cache-Control",

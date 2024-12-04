@@ -1,4 +1,5 @@
 using DataTableAssignment.Web.Data;
+using DataTableAssignment.Web.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,10 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddDbContext<DataTableAssignmentDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DataTableASsignmentConnectionString")));
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddAutoMapper(typeof(AutomapperProfiles));
 
 var app = builder.Build();
 
