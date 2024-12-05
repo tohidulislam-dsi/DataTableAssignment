@@ -41,7 +41,10 @@ public class EmployeeRepository : IEmployeeRepository
             await dbContext.SaveChangesAsync();
         }
     }
+    public IQueryable<Employee> GetAllAsQueryable()
+    {
+        return dbContext.Employees.AsQueryable();
+    }
 
-   
 }
 
