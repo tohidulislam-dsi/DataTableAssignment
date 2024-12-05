@@ -43,13 +43,17 @@ public class EmployeeRepository : IEmployeeRepository
             await dbContext.SaveChangesAsync();
         }
     }
-    
+    public async Task<int> GetTotalEmployeeCountAsync()
+    {
+        return await dbContext.Employees.CountAsync();
+    }
     public async Task<FilteredEmployeeDto> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
     {
         var query = dbContext.Employees.AsQueryable();
 
         // Global search filter
         if (!string.IsNullOrEmpty(requestData.Search.Value))
+
         {
             var globalSearchValue = requestData.Search.Value.ToLower();
             query = query.Where(x => x.Name.ToLower().Contains(globalSearchValue) ||

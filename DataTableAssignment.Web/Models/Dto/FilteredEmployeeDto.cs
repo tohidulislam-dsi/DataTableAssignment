@@ -6,6 +6,5 @@ namespace DataTableAssignment.Web.Models.Dto
     {
         public IEnumerable<Employee> Employees { get; set; }
         public int TotalFilteredRecords { get; set; }
-
     }
 }
