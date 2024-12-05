@@ -37,31 +37,31 @@ namespace DataTableAssignment.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetEmployeeList(EmployeeListRequestModel requestData)
         {
-            var employees = await employeeService.GetFilteredEmployeesAsync(requestData);
+            var response = await employeeService.GetFilteredEmployeesAsync(requestData);
 
-            var totalRecord = employees.Count();
+            //var totalRecord = employees.Count();
 
-            int start = requestData.Start;
-            int length = requestData.Length;
+            //int start = requestData.Start;
+            //int length = requestData.Length;
 
-            string sortColumnName = requestData.Columns[requestData.Order[0].Column].Name;
-            string sortDirection = requestData.Order[0].Dir;
+            //string sortColumnName = requestData.Columns[requestData.Order[0].Column].Name;
+            //string sortDirection = requestData.Order[0].Dir;
 
-            //sorting
-            employees = employees.AsQueryable().OrderBy(sortColumnName + " " + sortDirection).ToList();
-            var totalFilteredRecoird = employees.Count();
+            ////sorting
+            ////employees = employees.AsQueryable().OrderBy(sortColumnName + " " + sortDirection).ToList();
+            //var totalFilteredRecoird = employees.Count();
 
-            //paging
-            employees = employees.Skip(start).Take(length).ToList();
+            ////paging
+            ////employees = employees.Skip(start).Take(length).ToList();
 
-            var response = new EmployeeFilterResponseModel()
+            //var response = new EmployeeFilterResponseModel()
 
-            {
-                draw = requestData.Draw,
-                recordsTotal = totalRecord,
-                recordsFiltered = totalFilteredRecoird,
-                data = employees.ToList()
-            };
+            //{
+            //    draw = requestData.Draw,
+            //    recordsTotal = totalRecord,
+            //    recordsFiltered = totalFilteredRecoird,
+            //    data = employees.ToList()
+            //};
 
             return Ok(response);
         }

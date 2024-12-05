@@ -1,6 +1,8 @@
 using DataTableAssignment.Web.Models.Domain;
 using DataTableAssignment.Web.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
+using DataTableAssignment.Web.Models.Dto;
 public class EmployeeRepository : IEmployeeRepository
 {
     private readonly DataTableAssignmentDbContext dbContext;
@@ -41,9 +43,66 @@ public class EmployeeRepository : IEmployeeRepository
             await dbContext.SaveChangesAsync();
         }
     }
-    public IQueryable<Employee> GetAllAsQueryable()
+    
+    public async Task<FilteredEmployeeDto> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
     {
-        return dbContext.Employees.AsQueryable();
+        var query = dbContext.Employees.AsQueryable();
+
+        // Global search filter
+        if (!string.IsNullOrEmpty(requestData.Search.Value))
+        {
+            var globalSearchValue = requestData.Search.Value.ToLower();
+            query = query.Where(x => x.Name.ToLower().Contains(globalSearchValue) ||
+                                     x.Position.ToLower().Contains(globalSearchValue) ||
+                                     x.Office.ToLower().Contains(globalSearchValue) ||
+                                     x.Age.ToString().Contains(globalSearchValue) ||
+                                     x.Salary.ToString().Contains(globalSearchValue));
+        }
+
+        // Per column search filter
+        foreach (var column in requestData.Columns)
+        {
+            if (!string.IsNullOrEmpty(column.Search.Value))
+            {
+                var searchValue = column.Search.Value.ToLower();
+                switch (column.Name)
+                {
+                    case "name":
+                        query = query.Where(x => x.Name.ToLower().Contains(searchValue));
+                        break;
+                    case "position":
+                        query = query.Where(x => x.Position.ToLower().Contains(searchValue));
+                        break;
+                    case "office":
+                        query = query.Where(x => x.Office.ToLower().Contains(searchValue));
+                        break;
+                    case "age":
+                        query = query.Where(x => x.Age.ToString().Contains(searchValue));
+                        break;
+                    case "salary":
+                        query = query.Where(x => x.Salary.ToString().Contains(searchValue));
+                        break;
+                }
+            }
+        }
+        int start = requestData.Start;
+        int length = requestData.Length;
+
+        string sortColumnName = requestData.Columns[requestData.Order[0].Column].Name;
+        string sortDirection = requestData.Order[0].Dir;
+        // Sorting
+        query = query.OrderBy(sortColumnName + " " + sortDirection);
+        var totalFilteredRecords = await query.CountAsync();
+
+        // Paging
+        query = query.Skip(start).Take(length);
+
+        return new FilteredEmployeeDto
+        {
+            Employees = await query.ToListAsync(),
+            TotalFilteredRecords = totalFilteredRecords
+        };
+        
     }
 
 }

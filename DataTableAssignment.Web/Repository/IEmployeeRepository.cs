@@ -1,6 +1,7 @@
 using DataTableAssignment.Web.Models.Domain;
 using DataTableAssignment.Web.Data;
 using Microsoft.EntityFrameworkCore;
+using DataTableAssignment.Web.Models.Dto;
 public interface IEmployeeRepository
 {
     Task<IEnumerable<Employee>> GetAllAsync();
@@ -8,9 +9,7 @@ public interface IEmployeeRepository
     Task AddAsync(Employee employee);
     Task UpdateAsync(Employee employee);
     Task DeleteAsync(long id);
-    IQueryable<Employee> GetAllAsQueryable();
-
-
+    Task<FilteredEmployeeDto> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData);
 
 }
 

@@ -1,5 +1,6 @@
 using DataTableAssignment.Web.Models.Dto;
+using DataTableAssignment.Web.Models.Response;
 public interface IEmployeeService
 {
-    Task<IEnumerable<EmployeeDto>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData);
+    Task<EmployeeFilterResponseModel> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData);
 }
