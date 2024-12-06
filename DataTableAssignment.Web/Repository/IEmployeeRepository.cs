@@ -9,7 +9,7 @@ public interface IEmployeeRepository
     Task AddAsync(Employee employee);
     Task UpdateAsync(Employee employee);
     Task DeleteAsync(long id);
-    Task<FilteredEmployeeDto> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData);
+    Task<EmployeeFilterResultDto<Employee>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData);
     Task<int> GetTotalEmployeeCountAsync();
 
 }

@@ -47,7 +47,7 @@ public class EmployeeRepository : IEmployeeRepository
     {
         return await dbContext.Employees.CountAsync();
     }
-    public async Task<FilteredEmployeeDto> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
+    public async Task<EmployeeFilterResultDto<Employee>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
     {
         var query = dbContext.Employees.AsQueryable();
 
@@ -101,10 +101,11 @@ public class EmployeeRepository : IEmployeeRepository
         // Paging
         query = query.Skip(start).Take(length);
 
-        return new FilteredEmployeeDto
+        return new EmployeeFilterResultDto<Employee>
         {
-            Employees = await query.ToListAsync(),
-            TotalFilteredRecords = totalFilteredRecords
+            data = await query.ToListAsync(),
+            recordsFiltered = totalFilteredRecords,
+            recordsTotal = await GetTotalEmployeeCountAsync()
         };
         
     }

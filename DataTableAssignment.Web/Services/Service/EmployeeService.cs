@@ -19,20 +19,14 @@ public class EmployeeService : IEmployeeService
         this.mapper = mapper;
     }
 
-    public async Task<EmployeeFilterResultDto> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
+    public async Task<EmployeeFilterResultDto<EmployeeDto>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
     {
         var filteredEmployees = await employeeRepository.GetFilteredEmployeesAsync(requestData);
-        var empList = mapper.Map<IEnumerable<EmployeeDto>>(filteredEmployees.Employees);
-        var totalFilteredRecords = filteredEmployees.TotalFilteredRecords;
-        var totalRecords = await employeeRepository.GetTotalEmployeeCountAsync();
 
-        var employeeFilterResponse = new EmployeeFilterResultDto()
-        {
-            TotalRecords = totalRecords,
-            TotalFilteredRecords = totalFilteredRecords,
-            Employees = empList
-        };
+        var response = mapper.Map<EmployeeFilterResultDto<EmployeeDto>>(filteredEmployees);
 
-        return employeeFilterResponse;
+
+        return response;
+
     }
 }

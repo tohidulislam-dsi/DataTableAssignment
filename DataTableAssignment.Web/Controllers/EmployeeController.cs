@@ -9,6 +9,7 @@ using System.Linq.Dynamic.Core;
 using System.Buffers;
 using Azure.Core;
 using DataTableAssignment.Web.Models.Response;
+using AutoMapper;
 
 namespace DataTableAssignment.Web.Controllers
 {
@@ -18,15 +19,18 @@ namespace DataTableAssignment.Web.Controllers
         private readonly IConfiguration configuration;
         private readonly IEmployeeService employeeService;
         private readonly DataTableAssignmentDbContext dbContext;
+        private readonly IMapper mapper;
         public EmployeeController(DataTableAssignmentDbContext dbContext,  
             IHttpClientFactory httpClientFactory, 
             IConfiguration configuration,
-            IEmployeeService employeeService)
+            IEmployeeService employeeService,
+            IMapper mapper)
         {
             this.httpClientFactory = httpClientFactory;
             this.configuration = configuration;
             this.dbContext = dbContext;
             this.employeeService = employeeService;
+            this.mapper = mapper;
         }
         public async Task<IActionResult> Index()
         {
@@ -38,13 +42,10 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<IActionResult> GetEmployeeList(EmployeeListRequestModel requestData)
         {
             var result = await employeeService.GetFilteredEmployeesAsync(requestData);
-            var response = new EmployeeFilterResponseModel
-            {
-                draw = requestData.Draw,
-                recordsTotal = result.TotalRecords,
-                recordsFiltered = result.TotalFilteredRecords,
-                data = result.Employees.ToList()
-            };
+            var response = mapper.Map<EmployeeFilterResponseModel>(result);
+            response.draw = requestData.Draw;
+
+            
 
             return Ok(response);
         }

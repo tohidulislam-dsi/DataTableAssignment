@@ -1,9 +1,9 @@
 namespace DataTableAssignment.Web.Models.Dto
 {
-    public class EmployeeFilterResultDto
+    public class EmployeeFilterResultDto<T>
     {
-        public IEnumerable<EmployeeDto> Employees { get; set; }
-        public int TotalRecords { get; set; }
-        public int TotalFilteredRecords { get; set; }
+        public int recordsTotal { get; set; }
+        public int recordsFiltered { get; set; }
+        public IEnumerable<T> data { get; set; }
     }
 }
