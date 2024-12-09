@@ -1,114 +1,151 @@
 ﻿@{
-	ViewBag.Title = "Employee List";
+    ViewBag.Title = "Employee List";
 }
 
 <h2>Employee List</h2>
 
-<table id="searchTable" class="table table-striped table-bordered">
-	<thead></thead>
-</table>
-
 <table id="employeeTable" class="table table-striped table-bordered">
-	<thead>
-		<tr>
-			<th>Employee Name</th>
-			<th>Employee Position</th>
-			<th>Employee Office</th>
-			<th>Employee Age</th>
-			<th>Employee Salary</th>
-		</tr>
-	</thead>
+    <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Employee Position</th>
+            <th>Employee Office</th>
+            <th>Employee Age</th>
+            <th>Employee Salary</th>
+        </tr>
+        <tr>
+            <th><input type="text" placeholder="Search Name" /></th>
+            <th><input type="text" placeholder="Search Position" /></th>
+            <th><input type="text" placeholder="Search Office" /></th>
+            <th><input type="text" placeholder="Search Age" /></th>
+            <th><input type="text" placeholder="Search Salary" /></th>
+        </tr>
+    </thead>
 </table>
 
-
-<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet"/>
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
-<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" /> 
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css" rel="stylesheet" />
-<link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css  " rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css" rel="stylesheet" />
 <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" />
 
-
 <style>
-	.floatRight {
-		float: right;
-	}
-	.clear {
-		clear: both;
-	}
+    .floatRight {
+        float: right;
+    }
 
-	table.dataTable {
-		margin-top: 2em !important;
-	}
+    .clear {
+        clear: both;
+    }
 
-	.dataTables_wrapper {
-		padding-bottom: 50px; /* Add padding to the bottom to avoid overlap with footer */
-	}
+    table.dataTable {
+        margin-top: 2em !important;
+    }
+
+    .dataTables_wrapper {
+        padding-bottom: 50px; /* Add padding to the bottom to avoid overlap with footer */
+    }
+
+    /* Hide sorting buttons */
+    th.sorting:after,
+    th.sorting_asc:after,
+    th.sorting_desc:after {
+        display: none;
+    }
 </style>
+<link href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css" rel="stylesheet" />
+
 
 
 @section Scripts {
-	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
-	<script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
-	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-	<script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
-	<script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js"></script>
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
-	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
-	<script>
-		$(document).ready(function () {
-			var empTable=$('#employeeTable').DataTable({
-				"ajax": {
-					"url": "/Employee/GetEmployeeList",
-					"type": "POST",
-					"datatype": "json"
-				},
-				"columns": [
-					{ "data": "name", "name": "name" },
-					{ "data": "position", "name": "position" },
-					{ "data": "office", "name": "office" },
-					{ "data": "age", "name": "age" },
-					{ "data": "salary", "name": "salary"}
-				],
-				"serverSide": "true",
-				"order": [0, "asc"],
-				"processing": "true",
-				"language": {
-					"processing": "processing... please wait"
-				},
-				"topEnd": 'search',
-				"dom":'<"floatRight"B><"clear"><"floatRight"l><"clear"><"floatRight"f>rpti',
-				// "dom":'Blfrpti',
-				"buttons":['csv'],
-				"fnInitComplete": function (oSettings, json) {
-					addSearchControl(json);
-				}
-			});
-			function addSearchControl(json) {
-				 $("#searchTable thead").append($("#employeeTable thead tr:first").clone());
-				 $("#searchTable thead tr:eq(0) th").each(function (index) {
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
 
-					$(this).replaceWith('<th><input type="text" placeholder="Search ' + $(this).text() + '"></input></th>');
-					var searchControl = $("#searchTable thead tr:eq(0) th:eq(" + index + ") input");
-					searchControl.on('keyup', function () {
-						empTable.column(index).search(searchControl.val()).draw();
-					});
-					 
-					 
-				 });
-			 }
+    <script>
+        $(document).ready(function () {
+            var empTable = $('#employeeTable').DataTable({
+                "ajax": {
+                    "url": "/Employee/GetEmployeeList",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "name", "name": "name" },
+                    { "data": "position", "name": "position" },
+                    { "data": "office", "name": "office" },
+                    { "data": "age", "name": "age" },
+                    { "data": "salary", "name": "salary" }
+                ],
+                "serverSide": true,
+                "order": [0, "asc"],
+                "processing": true,
+                "language": {
+                    "processing": "processing... please wait"
+                },
+                "dom": '<"floatRight"B><"clear"><"floatRight"l><"clear"><"floatRight"f>rpti',
+                "buttons": [
+                    {
+                        extend: 'csvHtml5',
+                        text: 'Export CSV',
+                        className: 'btn btn-primary'
+                    }
+                ],
+                "initComplete": function () {
+                    this.api().columns().every(function () {
+                        var column = this;
+                        $('input', column.header()).on('keyup change clear', function () {
+                            if (column.search() !== this.value) {
+                                column.search(this.value, false, false).draw();
+                            }
+                        });
+                    });
+                }
+            });
 
-		});
-	</script>
+            // Disable sorting on search input fields
+            $('#employeeTable thead tr:eq(1) th').each(function (i) {
+                $('input', this).on('click', function (e) {
+                    e.stopPropagation();
+                });
+            });
+        });
+    </script>
+
+
+
 }
+

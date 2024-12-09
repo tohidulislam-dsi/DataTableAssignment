@@ -50,6 +50,7 @@ public class EmployeeRepository : IEmployeeRepository
     public async Task<EmployeeFilterResultDto<Employee>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
     {
         var query = dbContext.Employees.AsQueryable();
+        var totalEmployees = await query.CountAsync();
 
         // Global search filter
         if (!string.IsNullOrEmpty(requestData.Search.Value))
@@ -107,6 +108,7 @@ public class EmployeeRepository : IEmployeeRepository
         }
 
         var totalFilteredRecords = await query.CountAsync();
+        
 
 
         // Paging
@@ -116,7 +118,7 @@ public class EmployeeRepository : IEmployeeRepository
         {
             data = await query.ToListAsync(),
             recordsFiltered = totalFilteredRecords,
-            recordsTotal = await GetTotalEmployeeCountAsync()
+            recordsTotal = totalEmployees
         };
         
     }
