@@ -10,6 +10,7 @@ using System.Buffers;
 using Azure.Core;
 using DataTableAssignment.Web.Models.Response;
 using AutoMapper;
+using DataTableAssignment.Web.Models.ViewModel;
 
 namespace DataTableAssignment.Web.Controllers
 {
@@ -42,7 +43,7 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<IActionResult> GetEmployeeList(EmployeeListRequestModel requestData)
         {
             var result = await employeeService.GetFilteredEmployeesAsync(requestData);
-            var response = mapper.Map<EmployeeFilterResponseModel>(result);
+            var response = mapper.Map<EmployeeFilterViewModel>(result);
             response.draw = requestData.Draw;
 
             
