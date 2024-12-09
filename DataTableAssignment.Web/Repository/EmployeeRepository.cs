@@ -92,12 +92,24 @@ public class EmployeeRepository : IEmployeeRepository
         int start = requestData.Start;
         int length = requestData.Length;
 
-        string sortColumnName = requestData.Columns[requestData.Order[0].Column].Name;
-        string sortDirection = requestData.Order[0].Dir;
+        //string sortColumnName = requestData.Columns[requestData.Order[0].Column].Name;
+        //string sortDirection = requestData.Order[0].Dir;
         // Sorting
-        query = query.OrderBy(sortColumnName + " " + sortDirection);
-        var totalFilteredRecords = await query.CountAsync();
+        //query = query.OrderBy(sortColumnName + " " + sortDirection);
+        
 
+        if (requestData.Order != null && requestData.Order.Count > 0)
+        {
+            var ordering = string.Join(", ", requestData.Order.Select(o =>
+            {
+                var columnName = requestData.Columns[o.Column].Name;
+                var direction = o.Dir;
+                return $"{columnName} {direction}";
+            }));
+            query = query.OrderBy(ordering);
+        }
+
+        var totalFilteredRecords = await query.CountAsync();
         // Paging
         query = query.Skip(start).Take(length);
 
