@@ -20,10 +20,6 @@ namespace DataTableAssignment.Web.Mapping
                 .ForMember(dest => dest.data, opt => opt.MapFrom(src => src.data))
                 .ForMember(dest => dest.recordsTotal, opt => opt.MapFrom(src => src.recordsTotal))
                 .ForMember(dest => dest.recordsFiltered, opt => opt.MapFrom(src => src.recordsFiltered));
-            CreateMap<EmployeeFilterResultDto<EmployeeDto>, EmployeeFilterViewModel>()
-                .ForMember(dest => dest.data, opt => opt.MapFrom(src => src.data))
-                .ForMember(dest => dest.recordsTotal, opt => opt.MapFrom(src => src.recordsTotal))
-                .ForMember(dest => dest.recordsFiltered, opt => opt.MapFrom(src => src.recordsFiltered));
 
 
 

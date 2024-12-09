@@ -43,7 +43,7 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<IActionResult> GetEmployeeList(EmployeeListRequestModel requestData)
         {
             var result = await employeeService.GetFilteredEmployeesAsync(requestData);
-            var response = mapper.Map<EmployeeFilterViewModel>(result);
+            var response = mapper.Map<EmployeeFilterResponseModel>(result);
             response.draw = requestData.Draw;
 
             
