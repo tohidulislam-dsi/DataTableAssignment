@@ -92,11 +92,8 @@ public class EmployeeRepository : IEmployeeRepository
         int start = requestData.Start;
         int length = requestData.Length;
 
-        //string sortColumnName = requestData.Columns[requestData.Order[0].Column].Name;
-        //string sortDirection = requestData.Order[0].Dir;
+
         // Sorting
-        //query = query.OrderBy(sortColumnName + " " + sortDirection);
-        
 
         if (requestData.Order != null && requestData.Order.Count > 0)
         {
@@ -110,6 +107,8 @@ public class EmployeeRepository : IEmployeeRepository
         }
 
         var totalFilteredRecords = await query.CountAsync();
+
+
         // Paging
         query = query.Skip(start).Take(length);
 
