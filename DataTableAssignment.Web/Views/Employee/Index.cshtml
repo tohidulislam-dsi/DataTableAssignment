@@ -13,14 +13,18 @@
             <th>Employee Age</th>
             <th>Employee Salary</th>
         </tr>
-        <tr>
-            <th><input type="text" placeholder="Search Name" /></th>
-            <th><input type="text" placeholder="Search Position" /></th>
-            <th><input type="text" placeholder="Search Office" /></th>
-            <th><input type="text" placeholder="Search Age" /></th>
-            <th><input type="text" placeholder="Search Salary" /></th>
-        </tr>
+        
     </thead>
+    <tfoot style="display: table-header-group">
+        <tr>
+            <th>Employee Name</th>
+            <th>Employee Position</th>
+            <th>Employee Office</th>
+            <th>Employee Age</th>
+            <th>Employee Salary</th>
+        </tr>
+    </tfoot>
+    <tbody></tbody>
 </table>
 
 <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" />
@@ -48,19 +52,20 @@
         padding-bottom: 50px; /* Add padding to the bottom to avoid overlap with footer */
     }
 
-    /* Hide sorting buttons */
-    th.sorting:after,
-    th.sorting_asc:after,
-    th.sorting_desc:after {
-        display: none;
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+
+    .dataTables_paginate {
+        float: left !important;
     }
 </style>
 <link href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css" rel="stylesheet" />
-
-
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -116,7 +121,9 @@
                 "language": {
                     "processing": "processing... please wait"
                 },
-                "dom": '<"floatRight"B><"clear"><"floatRight"l><"clear"><"floatRight"f>rpti',
+                
+                "dom": '<"floatRight"B><"clear"><"floatRight"l><"clear"><"floatRight"f>rt<"dataTables_paginate"p>i',
+
                 "buttons": [
                     {
                         extend: 'csvHtml5',
@@ -124,16 +131,26 @@
                         className: 'btn btn-primary'
                     }
                 ],
-                "initComplete": function () {
-                    this.api().columns().every(function () {
-                        var column = this;
-                        $('input', column.header()).on('keyup change clear', function () {
-                            if (column.search() !== this.value) {
-                                column.search(this.value, false, false).draw();
-                            }
-                        });
+                    initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    let column = this;
+                    let title = column.footer().textContent;
+
+                    // Create input element
+                    let input = document.createElement('input');
+                    input.placeholder = title;
+                    column.footer().replaceChildren(input);
+
+                    // Event listener for user input
+                    input.addEventListener('keyup', () => {
+                        if (column.search() !== this.value) {
+                            column.search(input.value).draw();
+                        }
                     });
-                }
+                });
+        }
             });
 
             // Disable sorting on search input fields
@@ -145,7 +162,4 @@
         });
     </script>
 
-
-
 }
-
