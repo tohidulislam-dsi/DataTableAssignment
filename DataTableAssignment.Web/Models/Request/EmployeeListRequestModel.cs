@@ -3,8 +3,8 @@ public class EmployeeListRequestModel
     public int Draw { get; set; }
     public List<ColumnModel> Columns { get; set; }
     public List<OrderModel> Order { get; set; }
-    public int Start { get; set; }
-    public int Length { get; set; }
+    public int? Start { get; set; }
+    public int? Length { get; set; }
     public SearchModel Search { get; set; }
 }
 

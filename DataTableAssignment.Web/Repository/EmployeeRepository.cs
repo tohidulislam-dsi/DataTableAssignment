@@ -90,8 +90,8 @@ public class EmployeeRepository : IEmployeeRepository
                 }
             }
         }
-        int start = requestData.Start;
-        int length = requestData.Length;
+        int start = (int)requestData.Start;
+        int length = (int)requestData.Length;
 
 
         // Sorting

@@ -74,8 +74,9 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
     {
         var searchValue = new SqlParameter("@SearchValue", requestData.Search.Value ?? (object)DBNull.Value);
 
-        var start = new SqlParameter("@Start", requestData.Start);
-        var length = new SqlParameter("@Length", requestData.Length);
+        var start = new SqlParameter("@Start", requestData.Start.HasValue ? (object)requestData.Start.Value : DBNull.Value);
+        var length = new SqlParameter("@Length", requestData.Length.HasValue ? (object)requestData.Length.Value : DBNull.Value);
+        //var length = new SqlParameter("@Length", requestData.Length ?? (object)DBNull.Value);
         var orderBy = new SqlParameter("@OrderBy", string.Join(", ", requestData.Order.Select(o =>
         {
             var columnName = requestData.Columns[o.Column].Name;

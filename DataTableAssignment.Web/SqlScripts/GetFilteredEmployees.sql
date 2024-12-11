@@ -3,9 +3,9 @@ CREATE OR ALTER PROCEDURE GetFilteredEmployees
     @Start INT,
     @Length INT,
     @OrderBy NVARCHAR(MAX),
-    @Name NVARCHAR(MAX) = NULL,
-    @Position NVARCHAR(MAX) = NULL,
-    @Office NVARCHAR(MAX) = NULL,
+    @Name NVARCHAR(100) = NULL,
+    @Position NVARCHAR(100) = NULL,
+    @Office NVARCHAR(100) = NULL,
     @Age INT = NULL,
     @Salary INT = NULL,
     @TotalEmployees INT OUTPUT,
@@ -14,17 +14,6 @@ AS
 BEGIN
     -- Total employees count (unfiltered)
     SELECT @TotalEmployees = COUNT(*) FROM Employees;
-
-    -- Create a temporary table to store filtered employees
-    CREATE TABLE #FilteredEmployees (
-        Id BIGINT,       -- Replace these with actual column names
-        Name NVARCHAR(MAX),
-        Position NVARCHAR(MAX),
-        Office NVARCHAR(MAX),
-        Age INT,
-        Salary INT
-        -- Add other columns as needed
-    );
 
     -- Escape '%' and '_' in search values
     SET @SearchValue = REPLACE(REPLACE(@SearchValue, '[', '[[]'), '%', '[%]');
@@ -39,37 +28,56 @@ BEGIN
     SET @Office = REPLACE(REPLACE(@Office, '[', '[[]'), '%', '[%]');
     SET @Office = REPLACE(@Office, '_', '[_]');
 
-    -- Populate the temporary table with filtered data
-    INSERT INTO #FilteredEmployees
-    SELECT *
-    FROM Employees
-    WHERE (@SearchValue IS NULL OR
-           Name LIKE '%' + @SearchValue + '%' ESCAPE '\' OR
-           Position LIKE '%' + @SearchValue + '%' ESCAPE '\' OR
-           Office LIKE '%' + @SearchValue + '%' ESCAPE '\' OR
-           CAST(Age AS NVARCHAR) LIKE '%' + @SearchValue + '%' ESCAPE '\' OR
-           CAST(Salary AS NVARCHAR) LIKE '%' + @SearchValue + '%' ESCAPE '\')
-      AND (@Name IS NULL OR Name LIKE '%' + @Name + '%' ESCAPE '\')
-      AND (@Position IS NULL OR Position LIKE '%' + @Position + '%' ESCAPE '\')
-      AND (@Office IS NULL OR Office LIKE '%' + @Office + '%' ESCAPE '\')
-      AND (@Age IS NULL OR Age = @Age)
-      AND (@Salary IS NULL OR Salary = @Salary);
-
-    -- Get total filtered record count
-    SELECT @TotalFilteredRecords = COUNT(*) FROM #FilteredEmployees;
-
-    -- Construct dynamic SQL for pagination
+    -- Construct dynamic SQL for filtering and pagination
     DECLARE @SQL NVARCHAR(MAX) = N'
+    WITH FilteredEmployees AS (
+        SELECT *,
+               COUNT(*) OVER () AS TotalFilteredRecords
+        FROM Employees
+        WHERE (@SearchValue IS NULL OR
+               Name LIKE ''%'' + @SearchValue + ''%'' ESCAPE ''\'' OR
+               Position LIKE ''%'' + @SearchValue + ''%'' ESCAPE ''\'' OR
+               Office LIKE ''%'' + @SearchValue + ''%'' ESCAPE ''\'' OR
+               CAST(Age AS NVARCHAR) LIKE ''%'' + @SearchValue + ''%'' ESCAPE ''\'' OR
+               CAST(Salary AS NVARCHAR) LIKE ''%'' + @SearchValue + ''%'' ESCAPE ''\'')
+          AND (@Name IS NULL OR Name LIKE ''%'' + @Name + ''%'' ESCAPE ''\'')
+          AND (@Position IS NULL OR Position LIKE ''%'' + @Position + ''%'' ESCAPE ''\'')
+          AND (@Office IS NULL OR Office LIKE ''%'' + @Office + ''%'' ESCAPE ''\'')
+          AND (@Age IS NULL OR Age = @Age)
+          AND (@Salary IS NULL OR Salary = @Salary)
+    )
     SELECT *
-    FROM #FilteredEmployees
+    FROM FilteredEmployees
     ORDER BY ' + @OrderBy + '
-    OFFSET @Start ROWS FETCH NEXT @Length ROWS ONLY';
+    OFFSET @Start ROWS FETCH NEXT @Length ROWS ONLY;
 
-    -- Execute the paginated query
-    EXEC sp_executesql @SQL,
-        N'@Start INT, @Length INT',
-        @Start, @Length;
+    -- Query the CTE again to get the total filtered records
+    SELECT @TotalFilteredRecords = COUNT(*)
+    FROM FilteredEmployees;';
 
-    -- Drop the temporary table to clean up
-    DROP TABLE #FilteredEmployees;
+    -- Define parameter types for sp_executesql
+    DECLARE @ParamDefinition NVARCHAR(MAX) = N'
+        @SearchValue NVARCHAR(100),
+        @Name NVARCHAR(100),
+        @Position NVARCHAR(100),
+        @Office NVARCHAR(100),
+        @Age INT,
+        @Salary INT,
+        @Start INT,
+        @Length INT,
+        @TotalFilteredRecords INT OUTPUT';
+
+    -- Execute the query
+    EXEC sp_executesql
+        @SQL,
+        @ParamDefinition,
+        @SearchValue,
+        @Name,
+        @Position,
+        @Office,
+        @Age,
+        @Salary,
+        @Start,
+        @Length,
+        @TotalFilteredRecords OUTPUT;
 END;
