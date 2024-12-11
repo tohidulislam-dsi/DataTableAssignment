@@ -73,6 +73,7 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
     public async Task<EmployeeFilterResultDto<Employee>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
     {
         var searchValue = new SqlParameter("@SearchValue", requestData.Search.Value ?? (object)DBNull.Value);
+
         var start = new SqlParameter("@Start", requestData.Start);
         var length = new SqlParameter("@Length", requestData.Length);
         var orderBy = new SqlParameter("@OrderBy", string.Join(", ", requestData.Order.Select(o =>
