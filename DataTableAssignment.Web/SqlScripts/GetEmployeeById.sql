@@ -1,0 +1,6 @@
+CREATE PROCEDURE GetEmployeeById
+    @Id BIGINT
+AS
+BEGIN
+    SELECT * FROM Employees WHERE Id = @Id
+END
