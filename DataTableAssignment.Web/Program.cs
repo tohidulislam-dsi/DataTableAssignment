@@ -11,8 +11,9 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<DataTableAssignmentDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DataTableASsignmentConnectionString")));
 
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+//builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepositoryWithStoredProcedures>();
 builder.Services.AddAutoMapper(typeof(AutomapperProfiles));
 
 var app = builder.Build();
