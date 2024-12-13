@@ -9,5 +9,6 @@ namespace DataTableAssignment.Web.Data
 
         }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeWithTotalFilteredRecords> EmployeeWithTotalFilteredRecords { get; set; }
     }
 }

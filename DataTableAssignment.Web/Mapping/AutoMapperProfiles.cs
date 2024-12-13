@@ -12,7 +12,10 @@ namespace DataTableAssignment.Web.Mapping
         {
             CreateMap<Employee, EmployeeDto>().ReverseMap();
             CreateMap<EmployeeDto, EmployeeViewModel>().ReverseMap();
+            CreateMap<EmployeeWithTotalFilteredRecords, Employee>().ReverseMap();
             CreateMap<EmployeeFilterResultDto<Employee>, EmployeeFilterResultDto<EmployeeDto>>()
+                .ForMember(dest => dest.data, opt => opt.MapFrom(src => src.data));
+            CreateMap<EmployeeFilterResultDto<EmployeeWithTotalFilteredRecords>, EmployeeFilterResultDto<EmployeeDto>>()
                 .ForMember(dest => dest.data, opt => opt.MapFrom(src => src.data));
             CreateMap<EmployeeFilterResultDto<EmployeeDto>, EmployeeFilterResultDto<EmployeeViewModel>>()
                 .ForMember(dest => dest.data, opt => opt.MapFrom(src => src.data));
@@ -20,7 +23,6 @@ namespace DataTableAssignment.Web.Mapping
                 .ForMember(dest => dest.data, opt => opt.MapFrom(src => src.data))
                 .ForMember(dest => dest.recordsTotal, opt => opt.MapFrom(src => src.recordsTotal))
                 .ForMember(dest => dest.recordsFiltered, opt => opt.MapFrom(src => src.recordsFiltered));
-
 
 
         }

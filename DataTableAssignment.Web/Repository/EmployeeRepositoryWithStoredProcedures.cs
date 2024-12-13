@@ -5,14 +5,17 @@ using System.Data.SqlClient;
 using DataTableAssignment.Web.Models.Dto;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using AutoMapper;
 
 public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
 {
     private readonly DataTableAssignmentDbContext dbContext;
+    private readonly IMapper mapper;
 
-    public EmployeeRepositoryWithStoredProcedures(DataTableAssignmentDbContext dbContext)
+    public EmployeeRepositoryWithStoredProcedures(DataTableAssignmentDbContext dbContext, IMapper mapper)
     {
         this.dbContext = dbContext;
+        this.mapper = mapper;
     }
 
     public async Task<IEnumerable<Employee>> GetAllAsync()
@@ -76,7 +79,6 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
 
         var start = new SqlParameter("@Start", requestData.Start.HasValue ? (object)requestData.Start.Value : DBNull.Value);
         var length = new SqlParameter("@Length", requestData.Length.HasValue ? (object)requestData.Length.Value : DBNull.Value);
-        //var length = new SqlParameter("@Length", requestData.Length ?? (object)DBNull.Value);
         var orderBy = new SqlParameter("@OrderBy", string.Join(", ", requestData.Order.Select(o =>
         {
             var columnName = requestData.Columns[o.Column].Name;
@@ -104,13 +106,29 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             Direction = ParameterDirection.Output
         };
 
-        var employees = await dbContext.Employees
-            .FromSqlRaw("EXEC GetFilteredEmployees @SearchValue, @Start, @Length, @OrderBy, @Name, @Position, @Office, @Age, @Salary, @TotalEmployees OUTPUT, @TotalFilteredRecords OUTPUT",
-                        searchValue, start, length, orderBy, name, position, office, age, salary, totalEmployeesParam, totalFilteredRecordsParam)
-            .ToListAsync();
+        //var employees = await dbContext.Employees
+        //    .FromSqlRaw("EXEC GetFilteredEmployees @SearchValue, @Start, @Length, @OrderBy, @Name, @Position, @Office, @Age, @Salary, @TotalEmployees OUTPUT, @TotalFilteredRecords OUTPUT",
+        //                searchValue, start, length, orderBy, name, position, office, age, salary, totalEmployeesParam, totalFilteredRecordsParam)
+        //    .ToListAsync();
+        var filteredEmployeees = await dbContext.EmployeeWithTotalFilteredRecords
+        .FromSqlRaw("EXEC GetFilteredEmployees @SearchValue, @Start, @Length, @OrderBy, @Name, @Position, @Office, @Age, @Salary, @TotalEmployees OUTPUT, @TotalFilteredRecords OUTPUT",
+                    searchValue, start, length, orderBy, name, position, office, age, salary, totalEmployeesParam, totalFilteredRecordsParam)
+        .ToListAsync();
+        var totalFilteredRecords = 0;
+        var totalEmployees = totalEmployeesParam.Value != DBNull.Value ? (int)totalEmployeesParam.Value : 0;
+        if (filteredEmployeees.Count > 0)
+        {
+            totalFilteredRecords = filteredEmployeees.First().TotalFilteredRecords;
+        }
+       
+        //var totalFilteredRecords = totalFilteredRecordsParam.Value != DBNull.Value ? (int)totalFilteredRecordsParam.Value : 0;
+        //var totalFilteredRecords = 106;
+        var employees = mapper.Map<List<Employee>>(filteredEmployeees);
 
-        var totalEmployees = (int)totalEmployeesParam.Value;
-        var totalFilteredRecords = (int)totalFilteredRecordsParam.Value;
+        // Log the values for debugging
+        Console.WriteLine($"Total Employees: {totalEmployees}");
+        Console.WriteLine($"Total Filtered Records: {totalFilteredRecords}");
+
         return new EmployeeFilterResultDto<Employee>
         {
             data = employees,
