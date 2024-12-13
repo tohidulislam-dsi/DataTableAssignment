@@ -28,6 +28,15 @@ BEGIN
     SET @Office = REPLACE(REPLACE(@Office, '[', '[[]'), '%', '[%]');
     SET @Office = REPLACE(@Office, '_', '[_]');
 
+    DECLARE @PaginatedResults TABLE (
+        Id BIGINT,
+        Name NVARCHAR(100),
+        Position NVARCHAR(100),
+        Office NVARCHAR(100),
+        Age INT,
+        Salary INT,
+        TotalFilteredRecords INT
+    );
 
     -- Construct dynamic SQL for filtering, ordering, and pagination
     DECLARE @SQL NVARCHAR(MAX) = N'
@@ -50,11 +59,12 @@ BEGIN
     SELECT *
     FROM FilteredEmployees
     ORDER BY ' + @OrderBy + '
-    OFFSET @Start ROWS FETCH NEXT @Length ROWS ONLY
+    OFFSET @Start ROWS FETCH NEXT @Length ROWS ONLY;
+
+
 
     -- Query the CTE again to get the total filtered records
-    SELECT @TotalFilteredRecords = MAX(TotalFilteredRecords)
-    FROM FilteredEmployees;';
+';
 
     -- Define parameter types for sp_executesql
     DECLARE @ParamDefinition NVARCHAR(MAX) = N'
