@@ -1,42 +1,33 @@
 CREATE OR ALTER PROCEDURE GetFilteredEmployees
-    @SearchValue NVARCHAR(100),
-    @Start INT,
-    @Length INT,
-    @OrderBy NVARCHAR(MAX),
-    @Name NVARCHAR(100) = NULL,
-    @Position NVARCHAR(100) = NULL,
-    @Office NVARCHAR(100) = NULL,
-    @Age INT = NULL,
-    @Salary INT = NULL,
-    @TotalEmployees INT OUTPUT,
-    @TotalFilteredRecords INT OUTPUT
+    @EmployeeFilterData dbo.EmployeeFilterType READONLY,
+    @TotalEmployees INT OUTPUT
 AS
 BEGIN
     -- Total employees count (unfiltered)
     SELECT @TotalEmployees = COUNT(*) FROM Employees;
 
-    -- Escape '%' and '_' in search values
-    SET @SearchValue = REPLACE(REPLACE(@SearchValue, '[', '[[]'), '%', '[%]');
-    SET @SearchValue = REPLACE(@SearchValue, '_', '[_]');
+    -- Extract parameters from the table-valued parameter
+    DECLARE @SearchValue NVARCHAR(100);
+    DECLARE @Start INT;
+    DECLARE @Length INT;
+    DECLARE @OrderBy NVARCHAR(MAX);
+    DECLARE @Name NVARCHAR(100);
+    DECLARE @Position NVARCHAR(100);
+    DECLARE @Office NVARCHAR(100);
+    DECLARE @Age INT;
+    DECLARE @Salary INT;
 
-    SET @Name = REPLACE(REPLACE(@Name, '[', '[[]'), '%', '[%]');
-    SET @Name = REPLACE(@Name, '_', '[_]');
-
-    SET @Position = REPLACE(REPLACE(@Position, '[', '[[]'), '%', '[%]');
-    SET @Position = REPLACE(@Position, '_', '[_]');
-
-    SET @Office = REPLACE(REPLACE(@Office, '[', '[[]'), '%', '[%]');
-    SET @Office = REPLACE(@Office, '_', '[_]');
-
-    DECLARE @PaginatedResults TABLE (
-        Id BIGINT,
-        Name NVARCHAR(100),
-        Position NVARCHAR(100),
-        Office NVARCHAR(100),
-        Age INT,
-        Salary INT,
-        TotalFilteredRecords INT
-    );
+    SELECT
+        @SearchValue = SearchValue,
+        @Start = Start,
+        @Length = Length,
+        @OrderBy = OrderBy,
+        @Name = Name,
+        @Position = Position,
+        @Office = Office,
+        @Age = Age,
+        @Salary = Salary
+    FROM @EmployeeFilterData;
 
     -- Construct dynamic SQL for filtering, ordering, and pagination
     DECLARE @SQL NVARCHAR(MAX) = N'
@@ -59,12 +50,7 @@ BEGIN
     SELECT *
     FROM FilteredEmployees
     ORDER BY ' + @OrderBy + '
-    OFFSET @Start ROWS FETCH NEXT @Length ROWS ONLY;
-
-
-
-    -- Query the CTE again to get the total filtered records
-';
+    OFFSET @Start ROWS FETCH NEXT @Length ROWS ONLY;';
 
     -- Define parameter types for sp_executesql
     DECLARE @ParamDefinition NVARCHAR(MAX) = N'
@@ -75,8 +61,7 @@ BEGIN
         @Age INT,
         @Salary INT,
         @Start INT,
-        @Length INT,
-        @TotalFilteredRecords INT OUTPUT';
+        @Length INT';
 
     -- Execute the dynamic SQL
     EXEC sp_executesql
@@ -89,6 +74,5 @@ BEGIN
         @Age,
         @Salary,
         @Start,
-        @Length,
-        @TotalFilteredRecords OUTPUT;
+        @Length;
 END;

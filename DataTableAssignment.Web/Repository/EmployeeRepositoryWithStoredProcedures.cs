@@ -72,58 +72,69 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
     {
         return await dbContext.Employees.CountAsync();
     }
-
-    public async Task<EmployeeFilterResultDto<Employee>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
+    private DataTable CreateEmployeeFilterDataTable(EmployeeListRequestModel requestData)
     {
-        var searchValue = new SqlParameter("@SearchValue", requestData.Search.Value ?? (object)DBNull.Value);
+        var table = new DataTable();
+        table.Columns.Add("SearchValue", typeof(string));
+        table.Columns.Add("Start", typeof(int));
+        table.Columns.Add("Length", typeof(int));
+        table.Columns.Add("OrderBy", typeof(string));
+        table.Columns.Add("Name", typeof(string));
+        table.Columns.Add("Position", typeof(string));
+        table.Columns.Add("Office", typeof(string));
+        table.Columns.Add("Age", typeof(int));
+        table.Columns.Add("Salary", typeof(int));
 
-        var start = new SqlParameter("@Start", requestData.Start.HasValue ? (object)requestData.Start.Value : DBNull.Value);
-        var length = new SqlParameter("@Length", requestData.Length.HasValue ? (object)requestData.Length.Value : DBNull.Value);
-        var orderBy = new SqlParameter("@OrderBy", string.Join(", ", requestData.Order.Select(o =>
+        var row = table.NewRow();
+        row["SearchValue"] = requestData.Search.Value ?? (object)DBNull.Value;
+        row["Start"] = requestData.Start ?? (object)DBNull.Value;
+        row["Length"] = requestData.Length ?? (object)DBNull.Value;
+        row["OrderBy"] = string.Join(", ", requestData.Order.Select(o =>
         {
             var columnName = requestData.Columns[o.Column].Name;
             var direction = o.Dir;
             return $"{columnName} {direction}";
-        })));
+        }));
+        row["Name"] = requestData.Columns.FirstOrDefault(c => c.Name == "name")?.Search.Value ?? (object)DBNull.Value;
+        row["Position"] = requestData.Columns.FirstOrDefault(c => c.Name == "position")?.Search.Value ?? (object)DBNull.Value;
+        row["Office"] = requestData.Columns.FirstOrDefault(c => c.Name == "office")?.Search.Value ?? (object)DBNull.Value;
+        row["Age"] = requestData.Columns.FirstOrDefault(c => c.Name == "age")?.Search.Value ?? (object)DBNull.Value;
+        row["Salary"] = requestData.Columns.FirstOrDefault(c => c.Name == "salary")?.Search.Value ?? (object)DBNull.Value;
 
-        var name = new SqlParameter("@Name", requestData.Columns.FirstOrDefault(c => c.Name == "name")?.Search.Value ?? (object)DBNull.Value);
-        var position = new SqlParameter("@Position", requestData.Columns.FirstOrDefault(c => c.Name == "position")?.Search.Value ?? (object)DBNull.Value);
-        var office = new SqlParameter("@Office", requestData.Columns.FirstOrDefault(c => c.Name == "office")?.Search.Value ?? (object)DBNull.Value);
-        var age = new SqlParameter("@Age", requestData.Columns.FirstOrDefault(c => c.Name == "age")?.Search.Value ?? (object)DBNull.Value);
-        var salary = new SqlParameter("@Salary", requestData.Columns.FirstOrDefault(c => c.Name == "salary")?.Search.Value ?? (object)DBNull.Value);
+        table.Rows.Add(row);
+        return table;
+    }
+    public async Task<EmployeeFilterResultDto<Employee>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
+    {
+        var dataTable = CreateEmployeeFilterDataTable(requestData);
 
-        var totalEmployeesParam = new SqlParameter
+               var totalEmployeesParam = new SqlParameter
         {
             ParameterName = "@TotalEmployees",
             SqlDbType = SqlDbType.Int,
             Direction = ParameterDirection.Output
         };
-
-        var totalFilteredRecordsParam = new SqlParameter
+        var dataTableParam = new SqlParameter
         {
-            ParameterName = "@TotalFilteredRecords",
-            SqlDbType = SqlDbType.Int,
-            Direction = ParameterDirection.Output
+            ParameterName = "@EmployeeFilterData",
+            SqlDbType = SqlDbType.Structured,
+            TypeName = "dbo.EmployeeFilterType",
+            Value = dataTable
         };
 
-        //var employees = await dbContext.Employees
-        //    .FromSqlRaw("EXEC GetFilteredEmployees @SearchValue, @Start, @Length, @OrderBy, @Name, @Position, @Office, @Age, @Salary, @TotalEmployees OUTPUT, @TotalFilteredRecords OUTPUT",
-        //                searchValue, start, length, orderBy, name, position, office, age, salary, totalEmployeesParam, totalFilteredRecordsParam)
-        //    .ToListAsync();
-        var filteredEmployeees = await dbContext.EmployeeWithTotalFilteredRecords
-        .FromSqlRaw("EXEC GetFilteredEmployees @SearchValue, @Start, @Length, @OrderBy, @Name, @Position, @Office, @Age, @Salary, @TotalEmployees OUTPUT, @TotalFilteredRecords OUTPUT",
-                    searchValue, start, length, orderBy, name, position, office, age, salary, totalEmployeesParam, totalFilteredRecordsParam)
+        var filteredEmployees = await dbContext.EmployeeWithTotalFilteredRecords
+        .FromSqlRaw("EXEC GetFilteredEmployees @EmployeeFilterData, @TotalEmployees OUTPUT",
+                    dataTableParam, totalEmployeesParam)
         .ToListAsync();
         var totalFilteredRecords = 0;
         var totalEmployees = totalEmployeesParam.Value != DBNull.Value ? (int)totalEmployeesParam.Value : 0;
-        if (filteredEmployeees.Count > 0)
+        if (filteredEmployees.Count > 0)
         {
-            totalFilteredRecords = filteredEmployeees.First().TotalFilteredRecords;
+            totalFilteredRecords = filteredEmployees.First().TotalFilteredRecords;
         }
        
-        //var totalFilteredRecords = totalFilteredRecordsParam.Value != DBNull.Value ? (int)totalFilteredRecordsParam.Value : 0;
-        //var totalFilteredRecords = 106;
-        var employees = mapper.Map<List<Employee>>(filteredEmployeees);
+        
+        var employees = mapper.Map<List<Employee>>(filteredEmployees);
 
         // Log the values for debugging
         Console.WriteLine($"Total Employees: {totalEmployees}");

@@ -17,7 +17,15 @@ builder.Services.AddDbContext<DataTableAssignmentDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DataTableASsignmentConnectionString")));
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); 
-builder.Services.AddAutoMapper(typeof(AutomapperProfiles));    
+builder.Services.AddAutoMapper(typeof(AutomapperProfiles));
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// Use the CORS policy
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthorization();
 
