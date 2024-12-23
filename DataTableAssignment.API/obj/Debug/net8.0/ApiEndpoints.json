@@ -1,12 +1,18 @@
 [
   {
     "ContainingType": "DataTableAssignment.API.Controllers.EmployeeController",
-    "Method": "GetAllEmployees",
+    "Method": "GetEmployeeList",
     "RelativePath": "api/Employee",
-    "HttpMethod": "GET",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "requestData",
+        "Type": "EmployeeListRequestModel",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

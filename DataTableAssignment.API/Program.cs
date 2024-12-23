@@ -18,6 +18,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DataTableASsignm
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); 
 builder.Services.AddAutoMapper(typeof(AutomapperProfiles));
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 // Add CORS policy
 builder.Services.AddCors(options =>
 {

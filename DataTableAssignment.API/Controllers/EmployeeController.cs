@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DataTableAssignment.API.Data;
-using DataTableAssignment.API.Repositories;
 using DataTableAssignment.API.Models.Dto;
 using DataTableAssignment.API.Models.Domain;
+using DataTableAssignment.API.Models.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,23 +13,25 @@ namespace DataTableAssignment.API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly DataTableAssignmentDbContext dbContext;
-        private readonly IEmployeeRepository employeeRepository;
+        private readonly IEmployeeService employeeService;
         private readonly IMapper mapper;
-        public EmployeeController(DataTableAssignmentDbContext dbContext, IEmployeeRepository employeeRepository, IMapper mapper)
+        public EmployeeController(DataTableAssignmentDbContext dbContext, IEmployeeService employeeService, IMapper mapper)
         {
             this.dbContext = dbContext;
-            this.employeeRepository = employeeRepository;
+            this.employeeService = employeeService;
             this.mapper = mapper;
 
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        [HttpPost]
+        public async Task<IActionResult> GetEmployeeList(EmployeeListRequestModel requestData)
         {
-            var employeeDomain = await employeeRepository.GetEmployeesAsync();
+            var result = await employeeService.GetFilteredEmployeesAsync(requestData);
+            var response = mapper.Map<EmployeeFilterResponseModel>(result);
+            response.draw = requestData.Draw;
 
-            var employeeDto = mapper.Map<IEnumerable<EmployeeDto>>(employeeDomain);
-            //string[] employeeNames = new string[] { "John", "Doe", "Jane", "Doe" };
-            return Ok(employeeDto);
+
+
+            return Ok(response);
         }
     }
 }

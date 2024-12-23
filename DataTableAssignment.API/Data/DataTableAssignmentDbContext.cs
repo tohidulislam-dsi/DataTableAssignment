@@ -10,5 +10,6 @@ namespace DataTableAssignment.API.Data
                 
         }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeWithTotalFilteredRecords> EmployeeWithTotalFilteredRecords { get; set; }
     }
 }

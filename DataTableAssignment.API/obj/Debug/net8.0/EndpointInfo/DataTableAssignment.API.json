@@ -6,10 +6,29 @@
   },
   "paths": {
     "/api/Employee": {
-      "get": {
+      "post": {
         "tags": [
           "Employee"
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeListRequestModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeListRequestModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeListRequestModel"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -59,6 +78,93 @@
   },
   "components": {
     "schemas": {
+      "ColumnModel": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "searchable": {
+            "type": "boolean"
+          },
+          "orderable": {
+            "type": "boolean"
+          },
+          "search": {
+            "$ref": "#/components/schemas/SearchModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmployeeListRequestModel": {
+        "type": "object",
+        "properties": {
+          "draw": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColumnModel"
+            },
+            "nullable": true
+          },
+          "order": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderModel"
+            },
+            "nullable": true
+          },
+          "start": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "length": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "search": {
+            "$ref": "#/components/schemas/SearchModel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderModel": {
+        "type": "object",
+        "properties": {
+          "column": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dir": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SearchModel": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "regex": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "WeatherForecast": {
         "type": "object",
         "properties": {

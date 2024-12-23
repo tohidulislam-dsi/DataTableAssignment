@@ -19,9 +19,4 @@
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.4.9" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Response\" />
-    <Folder Include="Models\Request\" />
-  </ItemGroup>
-
 </Project>
