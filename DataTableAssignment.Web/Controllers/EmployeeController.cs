@@ -50,5 +50,10 @@ namespace DataTableAssignment.Web.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> AddOrEdit(int id=0) { 
+            return View(new EmployeeViewModel());
+        }
     }
 }

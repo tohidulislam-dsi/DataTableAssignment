@@ -108,7 +108,7 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
     {
         var dataTable = CreateEmployeeFilterDataTable(requestData);
 
-               var totalEmployeesParam = new SqlParameter
+         var totalEmployeesParam = new SqlParameter
         {
             ParameterName = "@TotalEmployees",
             SqlDbType = SqlDbType.Int,
@@ -122,9 +122,15 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             Value = dataTable
         };
 
+        var parameters = new object[]
+        {
+            dataTableParam,
+            totalEmployeesParam
+        };
+
         var filteredEmployees = await dbContext.EmployeeWithTotalFilteredRecords
         .FromSqlRaw("EXEC GetFilteredEmployees @EmployeeFilterData, @TotalEmployees OUTPUT",
-                    dataTableParam, totalEmployeesParam)
+                   parameters)
         .ToListAsync();
         var totalFilteredRecords = 0;
         var totalEmployees = totalEmployeesParam.Value != DBNull.Value ? (int)totalEmployeesParam.Value : 0;
