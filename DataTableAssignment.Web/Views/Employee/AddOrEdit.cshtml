@@ -1,48 +1,52 @@
 ﻿@model DataTableAssignment.Web.Models.ViewModel.EmployeeViewModel
 
 @{
-	Layout = null;
+    Layout = null;
 }
 
-@using (Html.BeginForm("Add", "Employee", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
-{
-	<div class="form-group">
-		@Html.LabelFor(model => model.Name, new {@class = "control-label"})
-		@Html.EditorFor(model => model.Name, new { htmlAttributes = new{ @class = "form-control" }})
-		@Html.ValidationMessageFor(model => model.Name)
-	</div>
-	<div class="form-group">
-		@Html.LabelFor(model => model.Position, new { @class = "control-label" })
-		@Html.EditorFor(model => model.Position, new { htmlAttributes = new { @class = "form-control" } })
-		@Html.ValidationMessageFor(model => model.Position)
-	</div>
-	<div class="form-group">
-		@Html.LabelFor(model => model.Office, new { @class = "control-label" })
-		@Html.EditorFor(model => model.Office, new { htmlAttributes = new { @class = "form-control" } })
-	</div>
-	<div class="form-group">
-		@Html.LabelFor(model => model.Age, new { @class = "control-label" })
-		@Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
-		@Html.ValidationMessageFor(model => model.Age)
-	</div>
-	<div class="form-group">
-		@Html.LabelFor(model => model.Salary, new { @class = "control-label" })
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text">$</span>
-			</div>
-			@Html.EditorFor(model => model.Salary, new { htmlAttributes = new { @class = "form-control" } })
-			@Html.ValidationMessageFor(model => model.Salary)
-		</div>
-	</div>
-	<div class="form-group">
-		<input type="submit" value="Submit" class="btn btn-primary" />
-		<input type="reset" value="Reset" class="btn" />
-	</div>
+<form asp-action="Add" asp-controller="Employee" method="post" onsubmit="return SubmitForm(this)">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
 
-}
+    <div class="form-group">
+        <label asp-for="Position" class="control-label"></label>
+        <input asp-for="Position" class="form-control" />
+        <span asp-validation-for="Position" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Office" class="control-label"></label>
+        <input asp-for="Office" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Age" class="control-label"></label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Salary" class="control-label"></label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            <input asp-for="Salary" class="form-control" />
+            <span asp-validation-for="Salary" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+        <input type="reset" value="Reset" class="btn" />
+    </div>
+</form>
+
 @section Scripts {
-	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 }

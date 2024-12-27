@@ -104,16 +104,16 @@
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 
 
     <script>
-        var Popup, dataTable;
+        var Popup, empTable;
         $(document).ready(function () {
-            var empTable = $('#employeeTable').DataTable({
+            empTable = $('#employeeTable').DataTable({
                 "ajax": {
                     "url": "/Employee/GetEmployeeList",
                     "type": "POST",
@@ -198,13 +198,20 @@
                         if(data.success)
                         {
                             Popup.dialog('close');
-                            dataTable.ajax.reload();
+                            empTable.ajax.reload();
 
                             $.notify(data.message,{
                                 globalPosition :"top center",
                                 className : "success"
                             })
 
+                        } else {
+                            // Display validation errors
+                            var validationSummary = $('<div class="validation-summary-errors text-danger"><ul></ul></div>');
+                            $.each(data.errors, function (key, value) {
+                                validationSummary.find('ul').append('<li>' + value + '</li>');
+                            });
+                            $(form).prepend(validationSummary);
                         }
                     }
                 });
