@@ -62,7 +62,7 @@ namespace DataTableAssignment.Web.Controllers
         {
             await employeeService.AddEmployeeAsync(employee);
             //return RedirectToAction("Index");
-            return Json(new { success = true, message = "Saved Successfully" });
+            return Json(new OperationResult { Success = true, Message = "Saved Successfully" });
            
         }
 
@@ -80,7 +80,7 @@ namespace DataTableAssignment.Web.Controllers
         {
             await employeeService.UpdateEmployeeAsync(employee);
             //return RedirectToAction("Index");
-            return Json(new { success = true, message = "Updated Successfully" });
+            return Json(new OperationResult { Success = true, Message = "Updated Successfully" });
 
         }
 
@@ -88,7 +88,7 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             await employeeService.DeleteEmployeeById(id);
-            return Json(new { success = true, message = "Deleted Successfully" });
+            return Json(new OperationResult { Success = true, Message = "Updated Successfully" });
         }
     }
 }
