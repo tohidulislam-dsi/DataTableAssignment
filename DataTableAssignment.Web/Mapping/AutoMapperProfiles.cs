@@ -12,7 +12,7 @@ namespace DataTableAssignment.Web.Mapping
         {
             CreateMap<Employee, EmployeeDto>();
             CreateMap<EmployeeDto, Employee>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()));
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id));
 
             CreateMap<EmployeeDto, EmployeeViewModel>().ReverseMap();
             CreateMap<EmployeeWithTotalFilteredRecords, Employee>().ReverseMap();

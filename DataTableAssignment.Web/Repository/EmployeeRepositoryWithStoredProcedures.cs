@@ -25,17 +25,19 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             .ToListAsync();
     }
 
-    public async Task<Employee> GetByIdAsync(long id)
+    public async Task<Employee?> GetByIdAsync(Guid id)
     {
         var parameter = new SqlParameter("@Id", id);
-        return await dbContext.Employees
+        var result = await dbContext.Employees
             .FromSqlRaw("EXEC GetEmployeeById @Id", parameter)
-            .FirstOrDefaultAsync();
+            .ToListAsync();
+
+        return result.FirstOrDefault();
     }
 
     public async Task AddAsync(Employee employee)
     {
-        var parameters = new[]
+        var parameters = new List<SqlParameter>
         {
             new SqlParameter("@Name", employee.Name),
             new SqlParameter("@Position", employee.Position),
@@ -44,12 +46,12 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             new SqlParameter("@Salary", employee.Salary)
         };
 
-        await dbContext.Database.ExecuteSqlRawAsync("EXEC AddEmployee @Name, @Position, @Office, @Age, @Salary", parameters);
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC AddEmployee @Name, @Position, @Office, @Age, @Salary", parameters.ToArray());
     }
 
     public async Task UpdateAsync(Employee employee)
     {
-        var parameters = new[]
+        var parameters = new List<SqlParameter>
         {
             new SqlParameter("@Id", employee.Id),
             new SqlParameter("@Name", employee.Name),
@@ -59,10 +61,10 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             new SqlParameter("@Salary", employee.Salary)
         };
 
-        await dbContext.Database.ExecuteSqlRawAsync("EXEC UpdateEmployee @Id, @Name, @Position, @Office, @Age, @Salary", parameters);
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC UpdateEmployee @Id, @Name, @Position, @Office, @Age, @Salary", parameters.ToArray());
     }
 
-    public async Task DeleteAsync(long id)
+    public async Task DeleteAsync(Guid id)
     {
         var parameter = new SqlParameter("@Id", id);
         await dbContext.Database.ExecuteSqlRawAsync("EXEC DeleteEmployee @Id", parameter);

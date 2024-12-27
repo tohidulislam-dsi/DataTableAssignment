@@ -2,9 +2,12 @@
 
 @{
     Layout = null;
+    var isEdit = Model.Id != Guid.Empty; // Assuming Id is a GUID and checking if it's not empty to determine edit mode
+    var formAction = isEdit ? "Edit" : "Add";
+
 }
 
-<form asp-action="Add" asp-controller="Employee" method="post" onsubmit="return SubmitForm(this)">
+<form asp-action="@formAction" asp-controller="Employee" method="post" onsubmit="return SubmitForm(this)">
     <div class="form-group">
         <label asp-for="Name" class="control-label"></label>
         <input asp-for="Name" class="form-control" />

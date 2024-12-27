@@ -37,4 +37,24 @@ public class EmployeeService : IEmployeeService
         var employee = mapper.Map<Employee>(employeeDto);
         await employeeRepository.AddAsync(employee);
     }
+
+    public async Task<EmployeeViewModel?> GetEmployeeById(Guid Id)
+    {
+        var employee = await employeeRepository.GetByIdAsync(Id);
+        var employeeDto = mapper.Map<EmployeeDto>(employee);
+        var employeeViewModel = mapper.Map<EmployeeViewModel>(employeeDto);
+        return employeeViewModel;
+    }
+
+    public async Task UpdateEmployeeAsync(EmployeeViewModel employeeViewModel)
+    {
+        var employeeDto = mapper.Map<EmployeeDto>(employeeViewModel);
+        var employee = mapper.Map<Employee>(employeeDto);
+        await employeeRepository.UpdateAsync(employee);
+    }
+
+    public async Task DeleteEmployeeById(Guid id)
+    {
+        await employeeRepository.DeleteAsync(id);
+    }
 }

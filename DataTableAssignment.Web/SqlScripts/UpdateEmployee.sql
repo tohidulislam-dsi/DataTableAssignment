@@ -1,5 +1,5 @@
-CREATE PROCEDURE UpdateEmployee
-    @Id BIGINT,
+CREATE OR ALTER PROCEDURE UpdateEmployee
+    @Id UNIQUEIDENTIFIER,
     @Name NVARCHAR(100),
     @Position NVARCHAR(100),
     @Office NVARCHAR(100),

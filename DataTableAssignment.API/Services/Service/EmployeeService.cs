@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using DataTableAssignment.API.Models.Domain;
 using Azure.Core;
 using DataTableAssignment.API.Models.Response;
+using DataTableAssignment.API.Models.ViewModel;
 
 
 public class EmployeeService : IEmployeeService
@@ -30,4 +31,6 @@ public class EmployeeService : IEmployeeService
         return response;
 
     }
+
+    
 }

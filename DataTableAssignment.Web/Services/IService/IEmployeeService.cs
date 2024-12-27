@@ -5,4 +5,8 @@ public interface IEmployeeService
 {
     Task<EmployeeFilterResultDto<EmployeeDto>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData);
     Task AddEmployeeAsync(EmployeeViewModel employeeViewModel);
+
+    Task<EmployeeViewModel?> GetEmployeeById(Guid id);
+    Task UpdateEmployeeAsync(EmployeeViewModel employeeViewModel);
+    Task DeleteEmployeeById(Guid id);
 }

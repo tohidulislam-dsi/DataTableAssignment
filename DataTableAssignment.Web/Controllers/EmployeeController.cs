@@ -64,22 +64,31 @@ namespace DataTableAssignment.Web.Controllers
             //return RedirectToAction("Index");
             return Json(new { success = true, message = "Saved Successfully" });
            
+        }
 
+        [HttpGet]
+        public async Task<ActionResult> Edit(Guid id)
+        {
+            var employee = await employeeService.GetEmployeeById(id);
+
+            return View("AddOrEdit", employee);
 
         }
 
-        //[HttpGet]
-        //public ActionResult Edit(int id)
-        //{
-        //    if (id == 0)
-        //        return View(new Employee());
-        //    else
-        //    {
-        //        using (DBModel db = new DBModel())
-        //        {
-        //            return View(db.Employees.Where(x => x.EmployeeID == id).FirstOrDefault<Employee>());
-        //        }
-        //    }
-        //}
+        [HttpPost]
+        public async Task<ActionResult> Edit(EmployeeViewModel employee)
+        {
+            await employeeService.UpdateEmployeeAsync(employee);
+            //return RedirectToAction("Index");
+            return Json(new { success = true, message = "Updated Successfully" });
+
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            await employeeService.DeleteEmployeeById(id);
+            return Json(new { success = true, message = "Deleted Successfully" });
+        }
     }
 }
