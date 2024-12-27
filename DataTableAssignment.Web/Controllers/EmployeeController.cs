@@ -60,9 +60,10 @@ namespace DataTableAssignment.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Add(EmployeeViewModel employee)
         {
-            await employeeService.AddEmployeeAsync(employee);
+            var employeeDto = mapper.Map<EmployeeDto>(employee);
+            var addedEmployee = await employeeService.AddEmployeeAsync(employeeDto);
             //return RedirectToAction("Index");
-            return Json(new OperationResult { Success = true, Message = "Saved Successfully" });
+            return Json(new OperationResult { Success = true, Message = "Saved Successfully", Id = employee.Id });
            
         }
 
@@ -78,9 +79,10 @@ namespace DataTableAssignment.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(EmployeeViewModel employee)
         {
-            await employeeService.UpdateEmployeeAsync(employee);
+            var employeeDto = mapper.Map<EmployeeDto>(employee);
+            await employeeService.UpdateEmployeeAsync(employeeDto);
             //return RedirectToAction("Index");
-            return Json(new OperationResult { Success = true, Message = "Updated Successfully" });
+            return Json(new OperationResult { Success = true, Message = "Updated Successfully", Id = employee.Id });
 
         }
 
@@ -88,7 +90,7 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             await employeeService.DeleteEmployeeById(id);
-            return Json(new OperationResult { Success = true, Message = "Updated Successfully" });
+            return Json(new OperationResult { Success = true, Message = "Deleted Successfully", Id=id });
         }
     }
 }

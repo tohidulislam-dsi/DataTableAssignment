@@ -31,11 +31,11 @@ public class EmployeeService : IEmployeeService
 
     }
 
-    public async Task AddEmployeeAsync(EmployeeViewModel employeeViewModel)
-    {
-        var employeeDto = mapper.Map<EmployeeDto>(employeeViewModel);
+    public async Task<Employee> AddEmployeeAsync(EmployeeDto employeeDto)
+    {   
         var employee = mapper.Map<Employee>(employeeDto);
         await employeeRepository.AddAsync(employee);
+        return employee;
     }
 
     public async Task<EmployeeViewModel?> GetEmployeeById(Guid Id)
@@ -46,9 +46,9 @@ public class EmployeeService : IEmployeeService
         return employeeViewModel;
     }
 
-    public async Task UpdateEmployeeAsync(EmployeeViewModel employeeViewModel)
+    public async Task UpdateEmployeeAsync(EmployeeDto employeeDto)
     {
-        var employeeDto = mapper.Map<EmployeeDto>(employeeViewModel);
+        
         var employee = mapper.Map<Employee>(employeeDto);
         await employeeRepository.UpdateAsync(employee);
     }

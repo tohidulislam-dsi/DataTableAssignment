@@ -39,6 +39,7 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
     {
         var parameters = new List<SqlParameter>
         {
+            new SqlParameter("@Id", employee.Id),
             new SqlParameter("@Name", employee.Name),
             new SqlParameter("@Position", employee.Position),
             new SqlParameter("@Office", employee.Office),
@@ -46,7 +47,7 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             new SqlParameter("@Salary", employee.Salary)
         };
 
-        await dbContext.Database.ExecuteSqlRawAsync("EXEC AddEmployee @Name, @Position, @Office, @Age, @Salary", parameters.ToArray());
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC AddEmployee @Name, @Position, @Office, @Age, @Salary, @Id", parameters.ToArray());
     }
 
     public async Task UpdateAsync(Employee employee)
