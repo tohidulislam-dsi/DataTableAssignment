@@ -11,6 +11,7 @@ using Azure.Core;
 using DataTableAssignment.Web.Models.Response;
 using AutoMapper;
 using DataTableAssignment.Web.Models.ViewModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataTableAssignment.Web.Controllers
 {
@@ -52,8 +53,33 @@ namespace DataTableAssignment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> AddOrEdit(int id=0) { 
-            return View(new EmployeeViewModel());
+        public async Task<ActionResult> Add(int id=0) {
+            return View("AddOrEdit", new EmployeeViewModel());
+
         }
+        [HttpPost]
+        public async Task<ActionResult> Add(EmployeeViewModel employee)
+        {
+            await employeeService.AddEmployeeAsync(employee);
+            //return RedirectToAction("Index");
+            return Json(new { success = true, message = "Saved Successfully" });
+           
+
+
+        }
+
+        //[HttpGet]
+        //public ActionResult Edit(int id)
+        //{
+        //    if (id == 0)
+        //        return View(new Employee());
+        //    else
+        //    {
+        //        using (DBModel db = new DBModel())
+        //        {
+        //            return View(db.Employees.Where(x => x.EmployeeID == id).FirstOrDefault<Employee>());
+        //        }
+        //    }
+        //}
     }
 }

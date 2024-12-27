@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DataTableAssignment.Web.Models.Domain;
 using Azure.Core;
 using DataTableAssignment.Web.Models.Response;
+using DataTableAssignment.Web.Models.ViewModel;
 
 
 public class EmployeeService : IEmployeeService
@@ -28,5 +29,12 @@ public class EmployeeService : IEmployeeService
 
         return response;
 
+    }
+
+    public async Task AddEmployeeAsync(EmployeeViewModel employeeViewModel)
+    {
+        var employeeDto = mapper.Map<EmployeeDto>(employeeViewModel);
+        var employee = mapper.Map<Employee>(employeeDto);
+        await employeeRepository.AddAsync(employee);
     }
 }
