@@ -14,7 +14,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DataTableASsignm
 
 //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepositoryWithStoredProcedures>();
+//builder.Services.AddScoped<IEmployeeRepository, EmployeeRepositoryWithStoredProcedures>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddAutoMapper(typeof(AutomapperProfiles));
 
 
