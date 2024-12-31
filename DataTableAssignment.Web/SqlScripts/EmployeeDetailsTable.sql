@@ -1,0 +1,7 @@
+CREATE TABLE EmployeeDetails (
+    Id UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+    EmployeeId UNIQUEIDENTIFIER NOT NULL,
+    Address NVARCHAR(MAX),
+    PhoneNumber NVARCHAR(MAX),
+    FOREIGN KEY (EmployeeId) REFERENCES Employees(Id)
+);

@@ -22,8 +22,8 @@ namespace DataTableAssignment.Web.Controllers
         private readonly IEmployeeService employeeService;
         private readonly DataTableAssignmentDbContext dbContext;
         private readonly IMapper mapper;
-        public EmployeeController(DataTableAssignmentDbContext dbContext,  
-            IHttpClientFactory httpClientFactory, 
+        public EmployeeController(DataTableAssignmentDbContext dbContext,
+            IHttpClientFactory httpClientFactory,
             IConfiguration configuration,
             IEmployeeService employeeService,
             IMapper mapper)
@@ -36,7 +36,7 @@ namespace DataTableAssignment.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            
+
             return View();
         }
 
@@ -47,13 +47,14 @@ namespace DataTableAssignment.Web.Controllers
             var response = mapper.Map<EmployeeFilterResponseModel>(result);
             response.draw = requestData.Draw;
 
-            
+
 
             return Ok(response);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Add() {
+        public async Task<ActionResult> Add()
+        {
             return View("AddOrEdit", new EmployeeViewModel());
 
         }
@@ -61,10 +62,12 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<ActionResult> Add(EmployeeViewModel employee)
         {
             var employeeDto = mapper.Map<EmployeeDto>(employee);
-            var employeeId = await employeeService.AddEmployeeAsync(employeeDto);
+            var employeeDetailsDto = mapper.Map<EmployeeDetailsDto>(employee);
+            var employeeBenefitsDto = mapper.Map<EmployeeBenefitsDto>(employee);
+            var employeeId = await employeeService.AddEmployeeAsync(employeeDto, employeeDetailsDto, employeeBenefitsDto);
             //return RedirectToAction("Index");
             return Json(new OperationResult { Success = true, Message = "Saved Successfully", Id = employeeId });
-           
+
         }
 
         [HttpGet]
@@ -91,7 +94,7 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             await employeeService.DeleteEmployeeById(id);
-            return Json(new OperationResult { Success = true, Message = "Deleted Successfully", Id=id });
+            return Json(new OperationResult { Success = true, Message = "Deleted Successfully", Id = id });
         }
     }
 }

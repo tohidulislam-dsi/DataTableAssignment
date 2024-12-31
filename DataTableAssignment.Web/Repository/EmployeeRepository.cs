@@ -25,8 +25,11 @@ public class EmployeeRepository : IEmployeeRepository
     public async Task<Guid> AddAsync(Employee employee)
     {
         await dbContext.Employees.AddAsync(employee);
+        await dbContext.EmployeeDetails.AddAsync(employeeDetails);
+        await dbContext.EmployeeBenefits.AddAsync(employeeBenefits);
         await dbContext.SaveChangesAsync();
         return employee.Id;
+
     }
 
     public async Task UpdateAsync(Employee employee)
