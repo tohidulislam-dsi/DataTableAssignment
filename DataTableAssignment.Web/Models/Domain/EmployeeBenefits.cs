@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataTableAssignment.Web.Models
+namespace DataTableAssignment.Web.Models.Domain
 {
     public class EmployeeBenefits
     {
