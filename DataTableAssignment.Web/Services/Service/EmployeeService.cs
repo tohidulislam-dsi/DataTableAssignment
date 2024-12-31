@@ -31,11 +31,11 @@ public class EmployeeService : IEmployeeService
 
     }
 
-    public async Task<Employee> AddEmployeeAsync(EmployeeDto employeeDto)
+    public async Task<Guid> AddEmployeeAsync(EmployeeDto employeeDto)
     {   
         var employee = mapper.Map<Employee>(employeeDto);
-        await employeeRepository.AddAsync(employee);
-        return employee;
+        var employeeId = await employeeRepository.AddAsync(employee);
+        return employeeId;
     }
 
     public async Task<EmployeeViewModel?> GetEmployeeById(Guid Id)

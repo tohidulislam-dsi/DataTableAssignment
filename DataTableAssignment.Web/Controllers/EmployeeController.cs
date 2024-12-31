@@ -53,7 +53,7 @@ namespace DataTableAssignment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Add(int id=0) {
+        public async Task<ActionResult> Add() {
             return View("AddOrEdit", new EmployeeViewModel());
 
         }
@@ -61,9 +61,9 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<ActionResult> Add(EmployeeViewModel employee)
         {
             var employeeDto = mapper.Map<EmployeeDto>(employee);
-            var addedEmployee = await employeeService.AddEmployeeAsync(employeeDto);
+            var employeeId = await employeeService.AddEmployeeAsync(employeeDto);
             //return RedirectToAction("Index");
-            return Json(new OperationResult { Success = true, Message = "Saved Successfully", Id = employee.Id });
+            return Json(new OperationResult { Success = true, Message = "Saved Successfully", Id = employeeId });
            
         }
 
@@ -82,6 +82,7 @@ namespace DataTableAssignment.Web.Controllers
             var employeeDto = mapper.Map<EmployeeDto>(employee);
             await employeeService.UpdateEmployeeAsync(employeeDto);
             //return RedirectToAction("Index");
+
             return Json(new OperationResult { Success = true, Message = "Updated Successfully", Id = employee.Id });
 
         }

@@ -10,9 +10,7 @@ namespace DataTableAssignment.Web.Mapping
     {
         public AutomapperProfiles()
         {
-            CreateMap<Employee, EmployeeDto>();
-            CreateMap<EmployeeDto, Employee>()
-               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id == Guid.Empty ? Guid.NewGuid() : src.Id));
+            CreateMap<Employee, EmployeeDto>().ReverseMap();
 
             CreateMap<EmployeeDto, EmployeeViewModel>().ReverseMap();
             CreateMap<EmployeeWithTotalFilteredRecords, Employee>().ReverseMap();

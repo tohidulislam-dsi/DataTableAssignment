@@ -22,10 +22,11 @@ public class EmployeeRepository : IEmployeeRepository
         return await dbContext.Employees.FindAsync(id);
     }
 
-    public async Task AddAsync(Employee employee)
+    public async Task<Guid> AddAsync(Employee employee)
     {
         await dbContext.Employees.AddAsync(employee);
         await dbContext.SaveChangesAsync();
+        return employee.Id;
     }
 
     public async Task UpdateAsync(Employee employee)

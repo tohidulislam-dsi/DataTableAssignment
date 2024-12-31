@@ -7,10 +7,15 @@ CREATE OR ALTER PROCEDURE AddEmployee
     @Id UNIQUEIDENTIFIER OUTPUT
 AS
 BEGIN
+    SET NOCOUNT ON;
 
+    -- Declare a table variable to capture the output
+    DECLARE @OutputTable TABLE (Id UNIQUEIDENTIFIER);
 
-    INSERT INTO Employees (Id, Name, Position, Office, Age, Salary)
-    VALUES (@Id, @Name, @Position, @Office, @Age, @Salary);
+    INSERT INTO Employees (Name, Position, Office, Age, Salary)
+    OUTPUT INSERTED.Id INTO @OutputTable
+    VALUES (@Name, @Position, @Office, @Age, @Salary);
 
-    SELECT @Id AS Id;
+    -- Retrieve the inserted Id
+    SELECT @Id = Id FROM @OutputTable;
 END

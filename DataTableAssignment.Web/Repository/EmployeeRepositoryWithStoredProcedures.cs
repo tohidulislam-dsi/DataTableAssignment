@@ -35,19 +35,28 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
         return result.FirstOrDefault();
     }
 
-    public async Task AddAsync(Employee employee)
+    public async Task<Guid> AddAsync(Employee employee)
     {
-        var parameters = new List<SqlParameter>
+        var idParameter = new SqlParameter
         {
-            new SqlParameter("@Id", employee.Id),
-            new SqlParameter("@Name", employee.Name),
+            ParameterName = "@Id",
+            SqlDbType = SqlDbType.UniqueIdentifier,
+            Direction = ParameterDirection.Output
+        };
+        var parameters = new List<SqlParameter>
+        {   new SqlParameter("@Name", employee.Name),
             new SqlParameter("@Position", employee.Position),
             new SqlParameter("@Office", employee.Office),
             new SqlParameter("@Age", employee.Age),
-            new SqlParameter("@Salary", employee.Salary)
+            new SqlParameter("@Salary", employee.Salary),
+            idParameter
         };
 
-        await dbContext.Database.ExecuteSqlRawAsync("EXEC AddEmployee @Name, @Position, @Office, @Age, @Salary, @Id", parameters.ToArray());
+        await dbContext.Database.ExecuteSqlRawAsync(
+            "EXEC AddEmployee @Name, @Position, @Office, @Age, @Salary, @Id OUTPUT", parameters
+        );
+
+        return (Guid)idParameter.Value;
     }
 
     public async Task UpdateAsync(Employee employee)
