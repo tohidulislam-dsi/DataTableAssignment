@@ -5,9 +5,9 @@ using DataTableAssignment.Web.Models.Domain;
 public interface IEmployeeService
 {
     Task<EmployeeFilterResultDto<EmployeeDto>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData);
-    Task<Guid> AddEmployeeAsync(EmployeeDto employeeDto);
+    Task<Guid> AddEmployeeAsync(EmployeeDto employeeDto, EmployeeDetailsDto employeeDetailsDto, EmployeeBenefitsDto employeeBenefitsDto);
 
     Task<EmployeeViewModel?> GetEmployeeById(Guid id);
-    Task UpdateEmployeeAsync(EmployeeDto employeeDto);
+    Task UpdateEmployeeAsync(EmployeeDto employeeDto, EmployeeDetailsDto employeeDetailsDto, EmployeeBenefitsDto employeeBenefitsDto);
     Task DeleteEmployeeById(Guid id);
 }

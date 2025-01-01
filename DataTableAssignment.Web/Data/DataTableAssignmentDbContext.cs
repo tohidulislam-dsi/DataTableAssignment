@@ -9,6 +9,8 @@ namespace DataTableAssignment.Web.Data
 
         }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeBenefits> EmployeeBenefits { get; set; }
+        public DbSet<EmployeeDetails> EmployeeDetails { get; set; }
         public DbSet<EmployeeWithTotalFilteredRecords> EmployeeWithTotalFilteredRecords { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

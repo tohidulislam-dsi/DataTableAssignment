@@ -34,8 +34,25 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
 
         return result.FirstOrDefault();
     }
+    public async Task<EmployeeDetails?> GetEmployeeDetailsByEmployeeIdAsync(Guid employeeId)
+    {
+        //NotImplementedException();
+        var parameter = new SqlParameter("@EmployeeId", employeeId);
+        var result = await dbContext.EmployeeDetails
+            .FromSqlRaw("EXEC GetEmployeeDetailsByEmployeeId @EmployeeId", parameter)
+            .ToListAsync();
+        return result.FirstOrDefault();
+    }
 
-    public async Task<Guid> AddAsync(Employee employee)
+    public async Task<EmployeeBenefits?> GetEmployeeBenefitsByEmployeeDetailsIdASync(Guid employeeDetailsId)
+    {
+        var parameter = new SqlParameter("@EmployeeDetailsId", employeeDetailsId);
+        var result = await dbContext.EmployeeBenefits
+            .FromSqlRaw("EXEC GetEmployeeBenefitsByEmployeeDetailsId @EmployeeDetailsId", parameter)
+            .ToListAsync();
+        return result.FirstOrDefault();
+    }
+    public async Task<Guid> AddAsync(Employee employee, EmployeeDetails employeeDetails, EmployeeBenefits employeeBenefits)
     {
         var idParameter = new SqlParameter
         {
@@ -49,6 +66,11 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             new SqlParameter("@Office", employee.Office),
             new SqlParameter("@Age", employee.Age),
             new SqlParameter("@Salary", employee.Salary),
+            new SqlParameter("@Address", employeeDetails.Address),
+            new SqlParameter("@PhoneNumber", employeeDetails.PhoneNumber),
+            new SqlParameter("@BenefitType", employeeBenefits.BenefitType),
+            new SqlParameter("@BenefitValue", employeeBenefits.BenefitValue),
+
             idParameter
         };
 
@@ -59,7 +81,7 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
         return (Guid)idParameter.Value;
     }
 
-    public async Task UpdateAsync(Employee employee)
+    public async Task UpdateAsync(Employee employee, EmployeeDetails employeDetails, EmployeeBenefits employeeBenefits)
     {
         var parameters = new List<SqlParameter>
         {

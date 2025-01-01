@@ -22,20 +22,82 @@ public class EmployeeRepository : IEmployeeRepository
         return await dbContext.Employees.FindAsync(id);
     }
 
-    public async Task<Guid> AddAsync(Employee employee)
+    public async Task<EmployeeDetails?> GetEmployeeDetailsByEmployeeIdAsync(Guid employeeId)
     {
-        await dbContext.Employees.AddAsync(employee);
-        await dbContext.EmployeeDetails.AddAsync(employeeDetails);
-        await dbContext.EmployeeBenefits.AddAsync(employeeBenefits);
-        await dbContext.SaveChangesAsync();
-        return employee.Id;
+        return await dbContext.EmployeeDetails.FirstOrDefaultAsync(ed => ed.EmployeeId == employeeId);
+    }
+
+    public async Task<EmployeeBenefits?> GetEmployeeBenefitsByEmployeeDetailsIdASync(Guid employeeDetailsId)
+    {
+        return await dbContext.EmployeeBenefits.FirstOrDefaultAsync(ed => ed.EmployeeDetailId == employeeDetailsId);
 
     }
 
-    public async Task UpdateAsync(Employee employee)
+    public async Task<Guid> AddAsync(Employee employee, EmployeeDetails employeeDetails, EmployeeBenefits employeeBenefits)
     {
-        dbContext.Employees.Update(employee);
-        await dbContext.SaveChangesAsync();
+        using var transaction = await dbContext.Database.BeginTransactionAsync();
+        try
+        {
+            await dbContext.Employees.AddAsync(employee);
+            await dbContext.SaveChangesAsync();
+
+            employeeDetails.EmployeeId = employee.Id;
+            await dbContext.EmployeeDetails.AddAsync(employeeDetails);
+            await dbContext.SaveChangesAsync();
+
+            employeeBenefits.EmployeeDetailId = employeeDetails.Id;
+            await dbContext.EmployeeBenefits.AddAsync(employeeBenefits);
+            await dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+            return employee.Id;
+        }
+        catch(Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+
+    }
+
+    public async Task UpdateAsync(Employee employee, EmployeeDetails employeeDetails, EmployeeBenefits employeeBenefits)
+    {
+        using var transaction = await dbContext.Database.BeginTransactionAsync();
+        try
+        {
+            // Update Employee
+            dbContext.Employees.Update(employee);
+            await dbContext.SaveChangesAsync();
+
+            // Update EmployeeDetails
+            var employeeDetailsId = await dbContext.EmployeeDetails
+            .Where(ed => ed.EmployeeId == employee.Id)
+            .Select(ed => ed.Id)
+            .FirstOrDefaultAsync();
+            employeeDetails.Id = employeeDetailsId;
+            employeeDetails.EmployeeId = employee.Id;
+            
+            dbContext.EmployeeDetails.Update(employeeDetails);
+            await dbContext.SaveChangesAsync();
+
+
+            var employeeBenefitsId = await dbContext.EmployeeBenefits
+            .Where(ed => ed.EmployeeDetailId == employeeDetailsId)
+            .Select(ed => ed.Id)
+            .FirstOrDefaultAsync();
+            
+            // Update EmployeeBenefits
+            employeeBenefits.Id = employeeBenefitsId;
+            employeeBenefits.EmployeeDetailId = employeeDetailsId;
+            dbContext.EmployeeBenefits.Update(employeeBenefits);
+            await dbContext.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task DeleteAsync(Guid id)

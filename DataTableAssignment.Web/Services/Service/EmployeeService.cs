@@ -7,6 +7,7 @@ using DataTableAssignment.Web.Models.Domain;
 using Azure.Core;
 using DataTableAssignment.Web.Models.Response;
 using DataTableAssignment.Web.Models.ViewModel;
+using System.Runtime.InteropServices;
 
 
 public class EmployeeService : IEmployeeService
@@ -42,15 +43,23 @@ public class EmployeeService : IEmployeeService
     public async Task<EmployeeViewModel?> GetEmployeeById(Guid Id)
     {
         var employee = await employeeRepository.GetByIdAsync(Id);
+        var employeeDetails = await employeeRepository.GetEmployeeDetailsByEmployeeIdAsync(employee.Id);
+        var employeeBenefits = await employeeRepository.GetEmployeeBenefitsByEmployeeDetailsIdASync(employeeDetails.Id);
         var employeeDto = mapper.Map<EmployeeDto>(employee);
-        var employeeViewModel = mapper.Map<EmployeeViewModel>(employeeDto);
+        var employeeDetailsDto = mapper.Map<EmployeeDetailsDto>(employeeDetails);
+        var employeeBenefitsDto = mapper.Map<EmployeeBenefitsDto>(employeeBenefits);
+
+        var employeeViewModel = mapper.Map<EmployeeViewModel>((employeeDto, employeeDetailsDto, employeeBenefitsDto));
+
         return employeeViewModel;
     }
 
-    public async Task UpdateEmployeeAsync(EmployeeDto employeeDto)
+    public async Task UpdateEmployeeAsync(EmployeeDto employeeDto, EmployeeDetailsDto employeeDetailsDto, EmployeeBenefitsDto employeeBenefitsDto)
     {
         var employee = mapper.Map<Employee>(employeeDto);
-        await employeeRepository.UpdateAsync(employee);
+        var employeeDetails = mapper.Map<EmployeeDetails>(employeeDetailsDto);
+        var employeeBenefits = mapper.Map<EmployeeBenefits>(employeeBenefitsDto);
+        await employeeRepository.UpdateAsync(employee, employeeDetails, employeeBenefits);
     }
 
     public async Task DeleteEmployeeById(Guid id)

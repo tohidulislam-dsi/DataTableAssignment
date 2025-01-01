@@ -83,7 +83,10 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<ActionResult> Edit(EmployeeViewModel employee)
         {
             var employeeDto = mapper.Map<EmployeeDto>(employee);
-            await employeeService.UpdateEmployeeAsync(employeeDto);
+            
+            var employeeDetailsDto = mapper.Map<EmployeeDetailsDto>(employee);
+            var employeeBenefitsDto = mapper.Map<EmployeeBenefitsDto>(employee);
+            await employeeService.UpdateEmployeeAsync(employeeDto, employeeDetailsDto, employeeBenefitsDto);
             //return RedirectToAction("Index");
 
             return Json(new OperationResult { Success = true, Message = "Updated Successfully", Id = employee.Id });
