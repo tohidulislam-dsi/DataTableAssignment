@@ -102,11 +102,41 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task DeleteAsync(Guid id)
     {
-        var employee = await dbContext.Employees.FindAsync(id);
-        if (employee != null)
+        using var transaction = await dbContext.Database.BeginTransactionAsync();
+        try
         {
-            dbContext.Employees.Remove(employee);
+            // Retrieve EmployeeDetails
+            var employeeDetails = await dbContext.EmployeeDetails
+                .Where(ed => ed.EmployeeId == id)
+                .ToListAsync();
+
+            // Retrieve EmployeeBenefits
+            var employeeBenefits = await dbContext.EmployeeBenefits
+                .Where(eb => employeeDetails.Select(ed => ed.Id).Contains(eb.EmployeeDetailId))
+                .ToListAsync();
+
+            // Delete EmployeeBenefits
+            dbContext.EmployeeBenefits.RemoveRange(employeeBenefits);
             await dbContext.SaveChangesAsync();
+
+            // Delete EmployeeDetails
+            dbContext.EmployeeDetails.RemoveRange(employeeDetails);
+            await dbContext.SaveChangesAsync();
+
+            // Delete Employee
+            var employee = await dbContext.Employees.FindAsync(id);
+            if (employee != null)
+            {
+                dbContext.Employees.Remove(employee);
+                await dbContext.SaveChangesAsync();
+            }
+
+            await transaction.CommitAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
         }
     }
     public async Task<int> GetTotalEmployeeCountAsync()
