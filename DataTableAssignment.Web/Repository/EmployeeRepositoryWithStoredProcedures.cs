@@ -27,9 +27,9 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
 
     public async Task<Employee?> GetByIdAsync(Guid id)
     {
-        var parameter = new SqlParameter("@Id", id);
+        var parameter = new SqlParameter("@EmployeeId", id);
         var result = await dbContext.Employees
-            .FromSqlRaw("EXEC GetEmployeeById @Id", parameter)
+            .FromSqlRaw("EXEC GetEmployeeById @EmployeeId", parameter)
             .ToListAsync();
 
         return result.FirstOrDefault();
