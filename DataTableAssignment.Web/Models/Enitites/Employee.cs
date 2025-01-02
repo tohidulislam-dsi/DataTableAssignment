@@ -1,4 +1,4 @@
-﻿namespace DataTableAssignment.Web.Models.Domain
+﻿namespace DataTableAssignment.Web.Models.Entities
 {
     public class Employee
     {
@@ -8,5 +8,8 @@
         public string Office { get; set; }
         public int Age { get; set; }
         public int Salary { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public EmployeeDetails? EmployeeDetails { get; set; }
+
     }
 }

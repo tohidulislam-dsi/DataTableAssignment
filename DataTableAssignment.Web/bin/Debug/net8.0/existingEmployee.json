@@ -1,0 +1,32 @@
+{
+  "$id": "1",
+  "Id": "158ded3d-b3f4-4e84-b2a7-08dd2b1937c7",
+  "Name": "AAA-TestUser2",
+  "Position": "SWE-1",
+  "Office": "DHK",
+  "Age": 22,
+  "Salary": 2323,
+  "CreatedOn": null,
+  "EmployeeDetails": {
+    "$id": "2",
+    "Id": "f49d767c-809f-4ac8-010f-08dd2b1937ca",
+    "EmployeeId": "158ded3d-b3f4-4e84-b2a7-08dd2b1937c7",
+    "Employee": {
+      "$ref": "1"
+    },
+    "Address": "CTG",
+    "PhoneNumber": "12324233",
+    "EmployeeBenefits": {
+      "$id": "3",
+      "Id": "684f14bc-7a9c-4b65-a1e6-08dd2b1937cc",
+      "EmployeeDetailId": "f49d767c-809f-4ac8-010f-08dd2b1937ca",
+      "EmployeeDetails": {
+        "$ref": "2"
+      },
+      "BenefitType": "Health Ins",
+      "BenefitValue": 2222,
+      "CreatedOn": null
+    },
+    "CreatedOn": null
+  }
+}

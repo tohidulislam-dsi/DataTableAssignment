@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using DataTableAssignment.Web.Models.Domain;
+using DataTableAssignment.Web.Models.Entities;
 namespace DataTableAssignment.Web.Data
 {
     public class DataTableAssignmentDbContext: DbContext
@@ -19,6 +19,38 @@ namespace DataTableAssignment.Web.Data
             modelBuilder.Entity<Employee>()
                 .Property(e => e.Id)
                 .ValueGeneratedOnAdd();
+
+            // Configure one-to-one relationship between Employee and EmployeeDetails
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.EmployeeDetails)
+                .WithOne(ed => ed.Employee)
+                .HasForeignKey<EmployeeDetails>(ed => ed.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure one-to-one relationship between EmployeeDetails and EmployeeBenefits
+            modelBuilder.Entity<EmployeeDetails>()
+                .HasOne(ed => ed.EmployeeBenefits)
+                .WithOne(eb => eb.EmployeeDetails)
+                .HasForeignKey<EmployeeBenefits>(eb => eb.EmployeeDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Employee>()
+                .Property(e => e.CreatedOn)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<EmployeeDetails>()
+                .Property(ed => ed.CreatedOn)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<EmployeeBenefits>()
+                .Property(eb => eb.CreatedOn)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .ValueGeneratedOnAdd();
+
+           
+
         }
     }
 }

@@ -62,9 +62,10 @@ namespace DataTableAssignment.Web.Controllers
         public async Task<ActionResult> Add(EmployeeViewModel employee)
         {
             var employeeDto = mapper.Map<EmployeeDto>(employee);
-            var employeeDetailsDto = mapper.Map<EmployeeDetailsDto>(employee);
-            var employeeBenefitsDto = mapper.Map<EmployeeBenefitsDto>(employee);
-            var employeeId = await employeeService.AddEmployeeAsync(employeeDto, employeeDetailsDto, employeeBenefitsDto);
+
+            //var employeeDetailsDto = mapper.Map<EmployeeDetailsDto>(employee);
+            //var employeeBenefitsDto = mapper.Map<EmployeeBenefitsDto>(employee);
+            var employeeId = await employeeService.AddEmployeeAsync(employeeDto);
             //return RedirectToAction("Index");
             return Json(new OperationResult { Success = true, Message = "Saved Successfully", Id = employeeId });
 
@@ -84,9 +85,9 @@ namespace DataTableAssignment.Web.Controllers
         {
             var employeeDto = mapper.Map<EmployeeDto>(employee);
             
-            var employeeDetailsDto = mapper.Map<EmployeeDetailsDto>(employee);
-            var employeeBenefitsDto = mapper.Map<EmployeeBenefitsDto>(employee);
-            await employeeService.UpdateEmployeeAsync(employeeDto, employeeDetailsDto, employeeBenefitsDto);
+            //var employeeDetailsDto = mapper.Map<EmployeeDetailsDto>(employee);
+            //var employeeBenefitsDto = mapper.Map<EmployeeBenefitsDto>(employee);
+            await employeeService.UpdateEmployeeAsync(employeeDto);
             //return RedirectToAction("Index");
 
             return Json(new OperationResult { Success = true, Message = "Updated Successfully", Id = employee.Id });

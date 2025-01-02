@@ -1,14 +1,13 @@
-﻿namespace DataTableAssignment.Web.Models.Dto
+namespace DataTableAssignment.Web.Models.Entities
 {
-    public class EmployeeDto
+    public class EmployeeWithTotalFilteredRecords
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Position { get; set; }
         public string Office { get; set; }
         public int Age { get; set; }
         public int Salary { get; set; }
-        public EmployeeDetailsDto EmployeeDetailsDto { get; set; }
-
+        public int TotalFilteredRecords { get; set; }
     }
 }

@@ -1,15 +1,20 @@
-using DataTableAssignment.Web.Models.Domain;
+using DataTableAssignment.Web.Models.Entities;
 using DataTableAssignment.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using DataTableAssignment.Web.Models.Dto;
+using AutoMapper;
+using System.Text.Json;
+using System;
 public class EmployeeRepository : IEmployeeRepository
 {
     private readonly DataTableAssignmentDbContext dbContext;
+    private readonly IMapper mapper;
 
-    public EmployeeRepository(DataTableAssignmentDbContext dbContext)
+    public EmployeeRepository(DataTableAssignmentDbContext dbContext, IMapper mapper)
     {
         this.dbContext = dbContext;
+        this.mapper = mapper;
     }
 
     public async Task<IEnumerable<Employee>> GetAllAsync()
@@ -19,7 +24,18 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<Employee?> GetByIdAsync(Guid id)
     {
-        return await dbContext.Employees.FindAsync(id);
+        var sql = dbContext.Employees
+                .Include(e => e.EmployeeDetails)
+                .ThenInclude(ed => ed.EmployeeBenefits)
+                .Where(e => e.Id == id)
+                .ToQueryString();
+
+        Console.WriteLine(sql);
+        return await dbContext.Employees
+        .Include(e => e.EmployeeDetails)
+        .ThenInclude(ed => ed.EmployeeBenefits)
+        .FirstOrDefaultAsync(e => e.Id == id);
+
     }
 
     public async Task<EmployeeDetails?> GetEmployeeDetailsByEmployeeIdAsync(Guid employeeId)
@@ -33,110 +49,64 @@ public class EmployeeRepository : IEmployeeRepository
 
     }
 
-    public async Task<Guid> AddAsync(Employee employee, EmployeeDetails employeeDetails, EmployeeBenefits employeeBenefits)
+    public async Task<Guid> AddAsync(Employee employee)
     {
-        using var transaction = await dbContext.Database.BeginTransactionAsync();
-        try
-        {
-            await dbContext.Employees.AddAsync(employee);
-            await dbContext.SaveChangesAsync();
+        await dbContext.Employees.AddAsync(employee);
+        await dbContext.SaveChangesAsync();
 
-            employeeDetails.EmployeeId = employee.Id;
-            await dbContext.EmployeeDetails.AddAsync(employeeDetails);
-            await dbContext.SaveChangesAsync();
-
-            employeeBenefits.EmployeeDetailId = employeeDetails.Id;
-            await dbContext.EmployeeBenefits.AddAsync(employeeBenefits);
-            await dbContext.SaveChangesAsync();
-            await transaction.CommitAsync();
-            return employee.Id;
-        }
-        catch(Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
+        return employee.Id;
+        
 
     }
 
-    public async Task UpdateAsync(Employee employee, EmployeeDetails employeeDetails, EmployeeBenefits employeeBenefits)
+    public async Task UpdateAsync(Employee employee)
     {
-        using var transaction = await dbContext.Database.BeginTransactionAsync();
-        try
+        var existingEmployee = await dbContext.Employees
+            .Include(e => e.EmployeeDetails)
+            .ThenInclude(ed => ed.EmployeeBenefits)
+            .FirstOrDefaultAsync(e => e.Id == employee.Id);
+
+        //existingEmployee.Name = employee.Name;
+        //existingEmployee.Office = employee.Office;
+        //existingEmployee.Position = employee.Position;
+        //existingEmployee.Age = employee.Age;
+        //existingEmployee.Salary = employee.Salary;
+        //existingEmployee.EmployeeDetails.Address = employee.EmployeeDetails.Address;
+        //existingEmployee.EmployeeDetails.PhoneNumber = employee.EmployeeDetails.PhoneNumber;
+        //existingEmployee.EmployeeDetails.EmployeeBenefits.BenefitType = employee.EmployeeDetails.EmployeeBenefits.BenefitType;
+        //existingEmployee.EmployeeDetails.EmployeeBenefits.BenefitValue = employee.EmployeeDetails.EmployeeBenefits.BenefitValue;
+
+        mapper.Map(employee, existingEmployee);
+        //UpdateNestedEntity(existingEmployee.EmployeeDetails, employee.EmployeeDetails,
+        //ed => ed.EmployeeBenefits, _context.EmployeeBenefits);
+
+        //mapper.Map(employee.EmployeeDetails, existingEmployee.EmployeeDetails);
+        //mapper.Map(employee.EmployeeDetails.EmployeeBenefits, existingEmployee.EmployeeDetails.EmployeeBenefits);
+        //string jsonString = JsonSerializer.Serialize(existingEmployee); 
+        //Console.WriteLine(jsonString);
+        //Console.WriteLine(existingEmployee);
+        string jsonString = JsonSerializer.Serialize(existingEmployee, new JsonSerializerOptions
         {
-            // Update Employee
-            dbContext.Employees.Update(employee);
-            await dbContext.SaveChangesAsync();
-
-            // Update EmployeeDetails
-            var employeeDetailsId = await dbContext.EmployeeDetails
-            .Where(ed => ed.EmployeeId == employee.Id)
-            .Select(ed => ed.Id)
-            .FirstOrDefaultAsync();
-            employeeDetails.Id = employeeDetailsId;
-            employeeDetails.EmployeeId = employee.Id;
-            
-            dbContext.EmployeeDetails.Update(employeeDetails);
-            await dbContext.SaveChangesAsync();
+            WriteIndented = true,
+            ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+        });
+        string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "existingEmployee3.json");
+        await File.WriteAllTextAsync(filePath, jsonString);
 
 
-            var employeeBenefitsId = await dbContext.EmployeeBenefits
-            .Where(ed => ed.EmployeeDetailId == employeeDetailsId)
-            .Select(ed => ed.Id)
-            .FirstOrDefaultAsync();
-            
-            // Update EmployeeBenefits
-            employeeBenefits.Id = employeeBenefitsId;
-            employeeBenefits.EmployeeDetailId = employeeDetailsId;
-            dbContext.EmployeeBenefits.Update(employeeBenefits);
-            await dbContext.SaveChangesAsync();
+        // Update Employee
+        //dbContext.Employees.Update(existingEmployee);
+        await dbContext.SaveChangesAsync();
 
-            await transaction.CommitAsync();
-        }
-        catch (Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        using var transaction = await dbContext.Database.BeginTransactionAsync();
-        try
+        var employee = await dbContext.Employees.FindAsync(id);
+        if (employee != null)
         {
-            // Retrieve EmployeeDetails
-            var employeeDetails = await dbContext.EmployeeDetails
-                .Where(ed => ed.EmployeeId == id)
-                .ToListAsync();
-
-            // Retrieve EmployeeBenefits
-            var employeeBenefits = await dbContext.EmployeeBenefits
-                .Where(eb => employeeDetails.Select(ed => ed.Id).Contains(eb.EmployeeDetailId))
-                .ToListAsync();
-
-            // Delete EmployeeBenefits
-            dbContext.EmployeeBenefits.RemoveRange(employeeBenefits);
+            dbContext.Employees.Remove(employee);
             await dbContext.SaveChangesAsync();
-
-            // Delete EmployeeDetails
-            dbContext.EmployeeDetails.RemoveRange(employeeDetails);
-            await dbContext.SaveChangesAsync();
-
-            // Delete Employee
-            var employee = await dbContext.Employees.FindAsync(id);
-            if (employee != null)
-            {
-                dbContext.Employees.Remove(employee);
-                await dbContext.SaveChangesAsync();
-            }
-
-            await transaction.CommitAsync();
-        }
-        catch (Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
         }
     }
     public async Task<int> GetTotalEmployeeCountAsync()

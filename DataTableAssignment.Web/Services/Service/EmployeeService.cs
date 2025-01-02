@@ -3,7 +3,7 @@ using AutoMapper;
 using DataTableAssignment.Web.Models.Dto;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
-using DataTableAssignment.Web.Models.Domain;
+using DataTableAssignment.Web.Models.Entities;
 using Azure.Core;
 using DataTableAssignment.Web.Models.Response;
 using DataTableAssignment.Web.Models.ViewModel;
@@ -30,36 +30,32 @@ public class EmployeeService : IEmployeeService
         return response;
     }
 
-    public async Task<Guid> AddEmployeeAsync(EmployeeDto employeeDto, EmployeeDetailsDto employeeDetailsDto, EmployeeBenefitsDto employeeBenefitsDto)
+    public async Task<Guid> AddEmployeeAsync(EmployeeDto employeeDto)
     {
         var employee = mapper.Map<Employee>(employeeDto);
-        var employeeDetails = mapper.Map<EmployeeDetails>(employeeDetailsDto);
-        var employeeBenefits = mapper.Map<EmployeeBenefits>(employeeBenefitsDto);
+        //var employeeDetails = mapper.Map<EmployeeDetails>(employeeDetailsDto);
+        //var employeeBenefits = mapper.Map<EmployeeBenefits>(employeeBenefitsDto);
 
-        var employeeId = await employeeRepository.AddAsync(employee, employeeDetails, employeeBenefits);
+        var employeeId = await employeeRepository.AddAsync(employee);
         return employeeId;
     }
 
     public async Task<EmployeeViewModel?> GetEmployeeById(Guid Id)
     {
         var employee = await employeeRepository.GetByIdAsync(Id);
-        var employeeDetails = await employeeRepository.GetEmployeeDetailsByEmployeeIdAsync(employee.Id);
-        var employeeBenefits = await employeeRepository.GetEmployeeBenefitsByEmployeeDetailsIdASync(employeeDetails.Id);
-        var employeeDto = mapper.Map<EmployeeDto>(employee);
-        var employeeDetailsDto = mapper.Map<EmployeeDetailsDto>(employeeDetails);
-        var employeeBenefitsDto = mapper.Map<EmployeeBenefitsDto>(employeeBenefits);
 
-        var employeeViewModel = mapper.Map<EmployeeViewModel>((employeeDto, employeeDetailsDto, employeeBenefitsDto));
+        var employeeDto = mapper.Map<EmployeeDto>(employee);
+        var employeeViewModel = mapper.Map<EmployeeViewModel>(employeeDto);
 
         return employeeViewModel;
     }
 
-    public async Task UpdateEmployeeAsync(EmployeeDto employeeDto, EmployeeDetailsDto employeeDetailsDto, EmployeeBenefitsDto employeeBenefitsDto)
+    public async Task UpdateEmployeeAsync(EmployeeDto employeeDto)
     {
         var employee = mapper.Map<Employee>(employeeDto);
-        var employeeDetails = mapper.Map<EmployeeDetails>(employeeDetailsDto);
-        var employeeBenefits = mapper.Map<EmployeeBenefits>(employeeBenefitsDto);
-        await employeeRepository.UpdateAsync(employee, employeeDetails, employeeBenefits);
+        //var employeeDetails = mapper.Map<EmployeeDetails>(employeeDetailsDto);
+        //var employeeBenefits = mapper.Map<EmployeeBenefits>(employeeBenefitsDto);
+        await employeeRepository.UpdateAsync(employee);
     }
 
     public async Task DeleteEmployeeById(Guid id)

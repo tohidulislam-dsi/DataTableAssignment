@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataTableAssignment.Web.Models.Domain
+namespace DataTableAssignment.Web.Models.Entities
 {
     public class EmployeeBenefits
     {
@@ -19,5 +19,6 @@ namespace DataTableAssignment.Web.Models.Domain
         public string BenefitType { get; set; }
 
         public int BenefitValue { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
 }

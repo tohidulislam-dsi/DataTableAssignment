@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataTableAssignment.Web.Models.Domain
+namespace DataTableAssignment.Web.Models.Entities
 {
     public class EmployeeDetails
     {
@@ -20,5 +20,8 @@ namespace DataTableAssignment.Web.Models.Domain
 
         [MaxLength(15)]
         public string PhoneNumber { get; set; }
+        public EmployeeBenefits EmployeeBenefits { get; set; }
+        public DateTime? CreatedOn { get; set; }
+
     }
 }

@@ -1,0 +1,32 @@
+{
+  "$id": "1",
+  "Id": "3b0c4313-37d4-432d-a994-08dd2b35b521",
+  "Name": "AAA-TestUser112",
+  "Position": "Test",
+  "Office": "Test",
+  "Age": 22,
+  "Salary": 111111,
+  "CreatedOn": null,
+  "EmployeeDetails": {
+    "$id": "2",
+    "Id": "da136df5-2a9e-4396-a6fd-08dd2b35b523",
+    "EmployeeId": "3b0c4313-37d4-432d-a994-08dd2b35b521",
+    "Employee": {
+      "$ref": "1"
+    },
+    "Address": "Dhaka11",
+    "PhoneNumber": "1234567",
+    "EmployeeBenefits": {
+      "$id": "3",
+      "Id": "ba13f43a-3de4-4260-99af-08dd2b35b526",
+      "EmployeeDetailId": "da136df5-2a9e-4396-a6fd-08dd2b35b523",
+      "EmployeeDetails": {
+        "$ref": "2"
+      },
+      "BenefitType": "Health insurance",
+      "BenefitValue": 222222,
+      "CreatedOn": "2025-01-02T13:59:42.94"
+    },
+    "CreatedOn": "2025-01-02T13:59:42.94"
+  }
+}

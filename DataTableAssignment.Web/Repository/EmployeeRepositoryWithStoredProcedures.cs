@@ -1,4 +1,4 @@
-using DataTableAssignment.Web.Models.Domain;
+using DataTableAssignment.Web.Models.Entities;
 using DataTableAssignment.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
@@ -52,7 +52,7 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             .ToListAsync();
         return result.FirstOrDefault();
     }
-    public async Task<Guid> AddAsync(Employee employee, EmployeeDetails employeeDetails, EmployeeBenefits employeeBenefits)
+    public async Task<Guid> AddAsync(Employee employee)
     {
         var idParameter = new SqlParameter
         {
@@ -66,10 +66,10 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             new SqlParameter("@Office", employee.Office),
             new SqlParameter("@Age", employee.Age),
             new SqlParameter("@Salary", employee.Salary),
-            new SqlParameter("@Address", employeeDetails.Address),
-            new SqlParameter("@PhoneNumber", employeeDetails.PhoneNumber),
-            new SqlParameter("@BenefitType", employeeBenefits.BenefitType),
-            new SqlParameter("@BenefitValue", employeeBenefits.BenefitValue),
+            new SqlParameter("@Address", employee.EmployeeDetails.Address),
+            new SqlParameter("@PhoneNumber", employee.EmployeeDetails.PhoneNumber),
+            new SqlParameter("@BenefitType", employee.EmployeeDetails.EmployeeBenefits.BenefitType),
+            new SqlParameter("@BenefitValue", employee.EmployeeDetails.EmployeeBenefits.BenefitValue),
 
             idParameter
         };
@@ -82,7 +82,7 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
         return (Guid)idParameter.Value;
     }
 
-    public async Task UpdateAsync(Employee employee, EmployeeDetails employeeDetails, EmployeeBenefits employeeBenefits)
+    public async Task UpdateAsync(Employee employee)
     {
         var parameters = new List<SqlParameter>
         {
@@ -92,10 +92,10 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             new SqlParameter("@Office", employee.Office),
             new SqlParameter("@Age", employee.Age),
             new SqlParameter("@Salary", employee.Salary),
-            new SqlParameter("@Address", employeeDetails.Address),
-            new SqlParameter("@PhoneNumber", employeeDetails.PhoneNumber),
-            new SqlParameter("@BenefitType", employeeBenefits.BenefitType),
-            new SqlParameter("@BenefitValue", employeeBenefits.BenefitValue)
+            new SqlParameter("@Address", employee.EmployeeDetails.Address),
+            new SqlParameter("@PhoneNumber", employee.EmployeeDetails.PhoneNumber),
+            new SqlParameter("@BenefitType", employee.EmployeeDetails.EmployeeBenefits.BenefitType),
+            new SqlParameter("@BenefitValue", employee.EmployeeDetails.EmployeeBenefits.BenefitValue)
 
         };
 
