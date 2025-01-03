@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataTableAssignment.Web.Models.Entities;
+using DataTableAssignment.Web.Models.Enitites;
 namespace DataTableAssignment.Web.Data
 {
     public class DataTableAssignmentDbContext: DbContext
@@ -48,8 +49,8 @@ namespace DataTableAssignment.Web.Data
                 .Property(eb => eb.CreatedOn)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAdd();
+            modelBuilder.Entity<EmployeeWithDetailsAndBenefits>().HasNoKey();
 
-           
 
         }
     }

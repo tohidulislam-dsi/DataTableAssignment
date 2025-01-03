@@ -3,6 +3,7 @@ using DataTableAssignment.Web.Models.Entities;
 using DataTableAssignment.Web.Models.Dto;
 using DataTableAssignment.Web.Models.Response;
 using DataTableAssignment.Web.Models.ViewModel;
+using DataTableAssignment.Web.Models.Enitites;
 
 namespace DataTableAssignment.Web.Mapping
 {
@@ -90,9 +91,25 @@ namespace DataTableAssignment.Web.Mapping
                 .ForPath(dest => dest.EmployeeDetails.PhoneNumber, opt => opt.MapFrom(src => src.EmployeeDetails.PhoneNumber))
                 .ForPath(dest => dest.EmployeeDetails.EmployeeBenefits.BenefitType, opt => opt.MapFrom(src => src.EmployeeDetails.EmployeeBenefits.BenefitType))
                 .ForPath(dest => dest.EmployeeDetails.EmployeeBenefits.BenefitValue, opt => opt.MapFrom(src => src.EmployeeDetails.EmployeeBenefits.BenefitValue));
-                
 
 
+            // Mapping from EmployeeWithDetailsAndBenefitsDto to Employee
+            CreateMap<EmployeeWithDetailsAndBenefits, Employee>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position))
+                .ForMember(dest => dest.Office, opt => opt.MapFrom(src => src.Office))
+                .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age))
+                .ForMember(dest => dest.Salary, opt => opt.MapFrom(src => src.Salary))
+                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn))
+                .ForPath(dest => dest.EmployeeDetails.Id, opt => opt.MapFrom(src => src.EmployeeDetailsId))
+                .ForPath(dest => dest.EmployeeDetails.Address, opt => opt.MapFrom(src => src.Address))
+                .ForPath(dest => dest.EmployeeDetails.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForPath(dest => dest.EmployeeDetails.CreatedOn, opt => opt.MapFrom(src => src.EmployeeDetailsCreatedOn))
+                .ForPath(dest => dest.EmployeeDetails.EmployeeBenefits.Id, opt => opt.MapFrom(src => src.EmployeeBenefitsId))
+                .ForPath(dest => dest.EmployeeDetails.EmployeeBenefits.BenefitType, opt => opt.MapFrom(src => src.BenefitType))
+                .ForPath(dest => dest.EmployeeDetails.EmployeeBenefits.BenefitValue, opt => opt.MapFrom(src => src.BenefitValue))
+                .ForPath(dest => dest.EmployeeDetails.EmployeeBenefits.CreatedOn, opt => opt.MapFrom(src => src.EmployeeBenefitsCreatedOn));
 
 
         }

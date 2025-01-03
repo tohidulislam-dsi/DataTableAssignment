@@ -6,6 +6,7 @@ using DataTableAssignment.Web.Models.Dto;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using AutoMapper;
+using DataTableAssignment.Web.Models.Enitites;
 
 public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
 {
@@ -28,11 +29,12 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
     public async Task<Employee?> GetByIdAsync(Guid id)
     {
         var parameter = new SqlParameter("@EmployeeId", id);
-        var result = await dbContext.Employees
+        var result = await dbContext.Set<EmployeeWithDetailsAndBenefits>()
             .FromSqlRaw("EXEC GetEmployeeById @EmployeeId", parameter)
             .ToListAsync();
-
-        return result.FirstOrDefault();
+        var dto = result.FirstOrDefault();
+        var employee = mapper.Map<Employee>(dto);
+        return employee;
     }
     public async Task<EmployeeDetails?> GetEmployeeDetailsByEmployeeIdAsync(Guid employeeId)
     {
