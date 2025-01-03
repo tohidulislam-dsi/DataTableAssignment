@@ -24,13 +24,6 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<Employee?> GetByIdAsync(Guid id)
     {
-        var sql = dbContext.Employees
-                .Include(e => e.EmployeeDetails)
-                .ThenInclude(ed => ed.EmployeeBenefits)
-                .Where(e => e.Id == id)
-                .ToQueryString();
-
-        Console.WriteLine(sql);
         return await dbContext.Employees
         .Include(e => e.EmployeeDetails)
         .ThenInclude(ed => ed.EmployeeBenefits)
@@ -56,7 +49,6 @@ public class EmployeeRepository : IEmployeeRepository
 
         return employee.Id;
         
-
     }
 
     public async Task UpdateAsync(Employee employee)
@@ -66,10 +58,7 @@ public class EmployeeRepository : IEmployeeRepository
             .ThenInclude(ed => ed.EmployeeBenefits)
             .FirstOrDefaultAsync(e => e.Id == employee.Id);
 
-
-
-        mapper.Map(employee, existingEmployee);
-       
+        mapper.Map(employee, existingEmployee);       
         
         await dbContext.SaveChangesAsync();
 
