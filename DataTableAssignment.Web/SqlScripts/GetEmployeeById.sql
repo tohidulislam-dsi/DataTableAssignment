@@ -3,20 +3,20 @@ CREATE OR ALTER PROCEDURE GetEmployeeById
 AS
 BEGIN
     SELECT
-        e.Id AS EmployeeId,
-        e.Name AS EmployeeName,
-        e.Position AS EmployeePosition,
-        e.Office AS EmployeeOffice,
-        e.Age AS EmployeeAge,
-        e.Salary AS EmployeeSalary,
-        e.CreatedOn AS EmployeeCreatedOn,
+        e.Id AS Id,
+        e.Name AS Name,
+        e.Position AS Position,
+        e.Office AS Office,
+        e.Age AS Age,
+        e.Salary AS Salary,
+        e.CreatedOn AS CreatedOn,
         ed.Id AS EmployeeDetailsId,
-        ed.Address AS EmployeeDetailsAddress,
-        ed.PhoneNumber AS EmployeeDetailsPhoneNumber,
+        ed.Address AS Address,
+        ed.PhoneNumber AS PhoneNumber,
         ed.CreatedOn AS EmployeeDetailsCreatedOn,
         eb.Id AS EmployeeBenefitsId,
-        eb.BenefitType AS EmployeeBenefitsBenefitType,
-        eb.BenefitValue AS EmployeeBenefitsBenefitValue,
+        eb.BenefitType AS BenefitType,
+        eb.BenefitValue AS BenefitValue,
         eb.CreatedOn AS EmployeeBenefitsCreatedOn
     FROM Employees e
     LEFT JOIN EmployeeDetails ed ON e.Id = ed.EmployeeId

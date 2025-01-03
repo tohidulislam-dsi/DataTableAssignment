@@ -33,8 +33,6 @@ public class EmployeeService : IEmployeeService
     public async Task<Guid> AddEmployeeAsync(EmployeeDto employeeDto)
     {
         var employee = mapper.Map<Employee>(employeeDto);
-        //var employeeDetails = mapper.Map<EmployeeDetails>(employeeDetailsDto);
-        //var employeeBenefits = mapper.Map<EmployeeBenefits>(employeeBenefitsDto);
 
         var employeeId = await employeeRepository.AddAsync(employee);
         return employeeId;
@@ -53,8 +51,6 @@ public class EmployeeService : IEmployeeService
     public async Task UpdateEmployeeAsync(EmployeeDto employeeDto)
     {
         var employee = mapper.Map<Employee>(employeeDto);
-        //var employeeDetails = mapper.Map<EmployeeDetails>(employeeDetailsDto);
-        //var employeeBenefits = mapper.Map<EmployeeBenefits>(employeeBenefitsDto);
         await employeeRepository.UpdateAsync(employee);
     }
 

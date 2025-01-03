@@ -70,14 +70,14 @@ namespace DataTableAssignment.Web.Mapping
                 .ForMember(dest => dest.recordsFiltered, opt => opt.MapFrom(src => src.recordsFiltered));
 
             // Employee Mapping
-            CreateMap<Employee, Employee>().ForAllMembers(opt => opt.Ignore());
-            CreateMap<Employee, Employee>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Office, opt => opt.MapFrom(src => src.Office))
-                .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position))
-                .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age))
-                .ForMember(dest => dest.Salary, opt => opt.MapFrom(src => src.Salary))
-                .ForMember(dest => dest.EmployeeDetails, opt => opt.Ignore()); // Do not replace directly
+            //CreateMap<Employee, Employee>().ForAllMembers(opt => opt.Ignore());
+            //CreateMap<Employee, Employee>()
+            //    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            //    .ForMember(dest => dest.Office, opt => opt.MapFrom(src => src.Office))
+            //    .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position))
+            //    .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age))
+            //    .ForMember(dest => dest.Salary, opt => opt.MapFrom(src => src.Salary))
+            //    .ForMember(dest => dest.EmployeeDetails, opt => opt.Ignore()); // Do not replace directly
 
 
             // EmployeeDetails Mapping
@@ -87,6 +87,7 @@ namespace DataTableAssignment.Web.Mapping
                 .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age))
                 .ForMember(dest => dest.Salary, opt => opt.MapFrom(src => src.Salary))
+                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForPath(dest => dest.EmployeeDetails.Address, opt => opt.MapFrom(src => src.EmployeeDetails.Address))
                 .ForPath(dest => dest.EmployeeDetails.PhoneNumber, opt => opt.MapFrom(src => src.EmployeeDetails.PhoneNumber))
                 .ForPath(dest => dest.EmployeeDetails.EmployeeBenefits.BenefitType, opt => opt.MapFrom(src => src.EmployeeDetails.EmployeeBenefits.BenefitType))

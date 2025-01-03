@@ -66,36 +66,11 @@ public class EmployeeRepository : IEmployeeRepository
             .ThenInclude(ed => ed.EmployeeBenefits)
             .FirstOrDefaultAsync(e => e.Id == employee.Id);
 
-        //existingEmployee.Name = employee.Name;
-        //existingEmployee.Office = employee.Office;
-        //existingEmployee.Position = employee.Position;
-        //existingEmployee.Age = employee.Age;
-        //existingEmployee.Salary = employee.Salary;
-        //existingEmployee.EmployeeDetails.Address = employee.EmployeeDetails.Address;
-        //existingEmployee.EmployeeDetails.PhoneNumber = employee.EmployeeDetails.PhoneNumber;
-        //existingEmployee.EmployeeDetails.EmployeeBenefits.BenefitType = employee.EmployeeDetails.EmployeeBenefits.BenefitType;
-        //existingEmployee.EmployeeDetails.EmployeeBenefits.BenefitValue = employee.EmployeeDetails.EmployeeBenefits.BenefitValue;
+
 
         mapper.Map(employee, existingEmployee);
-        //UpdateNestedEntity(existingEmployee.EmployeeDetails, employee.EmployeeDetails,
-        //ed => ed.EmployeeBenefits, _context.EmployeeBenefits);
-
-        //mapper.Map(employee.EmployeeDetails, existingEmployee.EmployeeDetails);
-        //mapper.Map(employee.EmployeeDetails.EmployeeBenefits, existingEmployee.EmployeeDetails.EmployeeBenefits);
-        //string jsonString = JsonSerializer.Serialize(existingEmployee); 
-        //Console.WriteLine(jsonString);
-        //Console.WriteLine(existingEmployee);
-        string jsonString = JsonSerializer.Serialize(existingEmployee, new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
-        });
-        string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "existingEmployee3.json");
-        await File.WriteAllTextAsync(filePath, jsonString);
-
-
-        // Update Employee
-        //dbContext.Employees.Update(existingEmployee);
+       
+        
         await dbContext.SaveChangesAsync();
 
     }
