@@ -62,22 +62,39 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
             SqlDbType = SqlDbType.UniqueIdentifier,
             Direction = ParameterDirection.Output
         };
+        var benefitsTable = new DataTable();
+        benefitsTable.Columns.Add("BenefitType", typeof(string));
+        benefitsTable.Columns.Add("BenefitValue", typeof(int));
+
+        if (employee.EmployeeDetails?.EmployeeBenefits != null)
+        {
+            foreach (var benefit in employee.EmployeeDetails.EmployeeBenefits)
+            {
+                benefitsTable.Rows.Add(benefit.BenefitType, benefit.BenefitValue);
+            }
+        }
+        var benefitsParameter = new SqlParameter
+        {
+            ParameterName = "@EmployeeBenefits",
+            SqlDbType = SqlDbType.Structured,
+            TypeName = "dbo.EmployeeBenefitType",
+            Value = benefitsTable
+        };
         var parameters = new List<SqlParameter>
-        {   new SqlParameter("@Name", employee.Name),
+        {
+            new SqlParameter("@Name", employee.Name),
             new SqlParameter("@Position", employee.Position),
             new SqlParameter("@Office", employee.Office),
             new SqlParameter("@Age", employee.Age),
             new SqlParameter("@Salary", employee.Salary),
-            new SqlParameter("@Address", employee.EmployeeDetails.Address),
-            new SqlParameter("@PhoneNumber", employee.EmployeeDetails.PhoneNumber),
-            new SqlParameter("@BenefitType", employee.EmployeeDetails.EmployeeBenefits.BenefitType),
-            new SqlParameter("@BenefitValue", employee.EmployeeDetails.EmployeeBenefits.BenefitValue),
-
+            new SqlParameter("@Address", (object)employee.EmployeeDetails?.Address ?? DBNull.Value),
+            new SqlParameter("@PhoneNumber", (object)employee.EmployeeDetails?.PhoneNumber ?? DBNull.Value),
+            benefitsParameter,
             idParameter
         };
 
         await dbContext.Database.ExecuteSqlRawAsync(
-            "EXEC InsertEmployeeData @Name, @Position, @Office, @Age, @Salary, @Address, @PhoneNumber, @BenefitType, @BenefitValue, @EmployeeId OUTPUT", 
+            "EXEC InsertEmployeeData @Name, @Position, @Office, @Age, @Salary, @Address, @PhoneNumber, @EmployeeBenefits, @EmployeeId OUTPUT",
             parameters
         );
 

@@ -28,11 +28,11 @@ namespace DataTableAssignment.Web.Data
                 .HasForeignKey<EmployeeDetails>(ed => ed.EmployeeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Configure one-to-one relationship between EmployeeDetails and EmployeeBenefits
+            // Configure one-to-many relationship between EmployeeDetails and EmployeeBenefits
             modelBuilder.Entity<EmployeeDetails>()
-                .HasOne(ed => ed.EmployeeBenefits)
+                .HasMany(ed => ed.EmployeeBenefits)
                 .WithOne(eb => eb.EmployeeDetails)
-                .HasForeignKey<EmployeeBenefits>(eb => eb.EmployeeDetailId)
+                .HasForeignKey(eb => eb.EmployeeDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Employee>()
@@ -49,9 +49,8 @@ namespace DataTableAssignment.Web.Data
                 .Property(eb => eb.CreatedOn)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAdd();
+
             modelBuilder.Entity<EmployeeWithDetailsAndBenefits>().HasNoKey();
-
-
         }
     }
 }

@@ -20,8 +20,9 @@ namespace DataTableAssignment.Web.Models.Entities
 
         [MaxLength(15)]
         public string PhoneNumber { get; set; }
-        public EmployeeBenefits EmployeeBenefits { get; set; }
-        public DateTime? CreatedOn { get; set; }
 
+        public ICollection<EmployeeBenefits> EmployeeBenefits { get; set; } = new List<EmployeeBenefits>();
+
+        public DateTime? CreatedOn { get; set; }
     }
 }

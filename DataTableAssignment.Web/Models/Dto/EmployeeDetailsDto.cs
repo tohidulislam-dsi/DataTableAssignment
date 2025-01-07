@@ -8,7 +8,7 @@ namespace DataTableAssignment.Web.Models.Dto
         public Guid EmployeeId { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-        public EmployeeBenefitsDto EmployeeBenefitsDto { get; set; }
+        public List<EmployeeBenefitsDto> EmployeeBenefitsDto { get; set; }
 
     }
 }

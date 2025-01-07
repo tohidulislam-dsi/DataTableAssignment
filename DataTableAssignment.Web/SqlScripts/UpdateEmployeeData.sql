@@ -1,4 +1,4 @@
-CREATE PROCEDURE UpdateEmployeeData
+CREATE OR ALTER PROCEDURE UpdateEmployeeData
     @EmployeeId UNIQUEIDENTIFIER,
     @Name NVARCHAR(MAX),
     @Position NVARCHAR(MAX),
@@ -17,38 +17,32 @@ BEGIN
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        -- Update the Employees table
+        -- Update Employees table
         UPDATE dbo.Employees
-        SET Name = @Name,
+        SET
+            Name = @Name,
             Position = @Position,
             Office = @Office,
             Age = @Age,
             Salary = @Salary
         WHERE Id = @EmployeeId;
 
-        -- Check if the employee exists
-        IF @@ROWCOUNT = 0
-            THROW 50001, 'Employee not found.', 1;
 
-        -- Update the EmployeeDetails table
+        -- Update EmployeeDetails table
         UPDATE dbo.EmployeeDetails
-        SET Address = @Address,
+        SET
+            Address = @Address,
             PhoneNumber = @PhoneNumber
         WHERE EmployeeId = @EmployeeId;
 
-        -- Check if employee details exist
-        IF @@ROWCOUNT = 0
-            THROW 50002, 'Employee details not found.', 1;
-
-        -- Update the EmployeeBenefits table
-        UPDATE dbo.EmployeeBenefits
-        SET BenefitType = @BenefitType,
-            BenefitValue = @BenefitValue
-        WHERE EmployeeDetailId = (SELECT Id FROM EmployeeDetails WHERE EmployeeId = @EmployeeId);
-
-        -- Check if employee benefits exist
-        IF @@ROWCOUNT = 0
-            THROW 50003, 'Employee benefits not found.', 1;
+        -- Update EmployeeBenefits table using join for efficiency
+        UPDATE eb
+        SET
+            eb.BenefitType = @BenefitType,
+            eb.BenefitValue = @BenefitValue
+        FROM dbo.EmployeeBenefits eb
+        JOIN dbo.EmployeeDetails ed ON eb.EmployeeDetailId = ed.Id
+        WHERE ed.EmployeeId = @EmployeeId;
 
         -- Commit the transaction
         COMMIT TRANSACTION;
@@ -61,7 +55,4 @@ BEGIN
         -- Rethrow the error
         THROW;
     END CATCH;
-
-    -- Return the EmployeeId to confirm the operation
-    RETURN @EmployeeId;
 END;

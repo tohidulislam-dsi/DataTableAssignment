@@ -4,7 +4,6 @@
     Layout = null;
     var isEdit = Model.Id != Guid.Empty; // Assuming Id is a GUID and checking if it's not empty to determine edit mode
     var formAction = isEdit ? "Edit" : "Add";
-
 }
 
 <form asp-action="@formAction" asp-controller="Employee" method="post" onsubmit="return SubmitForm(this)">
@@ -44,32 +43,41 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Address" class="control-label"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
+        <label asp-for="EmployeeDetails.Address" class="control-label"></label>
+        <input asp-for="EmployeeDetails.Address" class="form-control" />
+        <span asp-validation-for="EmployeeDetails.Address" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="PhoneNumber" class="control-label"></label>
-        <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        <label asp-for="EmployeeDetails.PhoneNumber" class="control-label"></label>
+        <input asp-for="EmployeeDetails.PhoneNumber" class="form-control" />
+        <span asp-validation-for="EmployeeDetails.PhoneNumber" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="BenefitType" class="control-label"></label>
-        <input asp-for="BenefitType" class="form-control" />
-        <span asp-validation-for="BenefitType" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="BenefitValue" class="control-label"></label>
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">$</span>
+    <div id="benefits-container">
+        @for (int i = 0; i < Model.EmployeeDetails.EmployeeBenefits.Count; i++)
+        {
+            <div class="form-group">
+                <label asp-for="EmployeeDetails.EmployeeBenefits[i].BenefitType" class="control-label"></label>
+                <input asp-for="EmployeeDetails.EmployeeBenefits[i].BenefitType" class="form-control" />
+                <span asp-validation-for="EmployeeDetails.EmployeeBenefits[i].BenefitType" class="text-danger"></span>
             </div>
-            <input asp-for="BenefitValue" class="form-control" />
-        </div>
-        <span asp-validation-for="BenefitValue" class="text-danger"></span>
+
+            <div class="form-group">
+                <label asp-for="EmployeeDetails.EmployeeBenefits[i].BenefitValue" class="control-label"></label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input asp-for="EmployeeDetails.EmployeeBenefits[i].BenefitValue" class="form-control" />
+                </div>
+                <span asp-validation-for="EmployeeDetails.EmployeeBenefits[i].BenefitValue" class="text-danger"></span>
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <button type="button" class="btn btn-secondary" onclick="addBenefit()">Add Benefit</button>
     </div>
 
     <div class="form-group">
@@ -82,4 +90,26 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function addBenefit() {
+            var index = $('#benefits-container .form-group').length / 2;
+            var benefitHtml = `
+                <div class="form-group">
+                    <label for="EmployeeDetails_EmployeeBenefits_${index}__BenefitType" class="control-label">Benefit Type</label>
+                    <input type="text" id="EmployeeDetails_EmployeeBenefits_${index}__BenefitType" name="EmployeeDetails.EmployeeBenefits[${index}].BenefitType" class="form-control" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="EmployeeDetails.EmployeeBenefits[${index}].BenefitType" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label for="EmployeeDetails_EmployeeBenefits_${index}__BenefitValue" class="control-label">Benefit Value</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        <input type="number" id="EmployeeDetails_EmployeeBenefits_${index}__BenefitValue" name="EmployeeDetails.EmployeeBenefits[${index}].BenefitValue" class="form-control" />
+                    </div>
+                    <span class="text-danger field-validation-valid" data-valmsg-for="EmployeeDetails.EmployeeBenefits[${index}].BenefitValue" data-valmsg-replace="true"></span>
+                </div>`;
+            $('#benefits-container').append(benefitHtml);
+        }
+    </script>
 }

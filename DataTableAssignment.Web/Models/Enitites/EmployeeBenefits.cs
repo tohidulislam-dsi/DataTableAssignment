@@ -19,6 +19,7 @@ namespace DataTableAssignment.Web.Models.Entities
         public string BenefitType { get; set; }
 
         public int BenefitValue { get; set; }
+
         public DateTime? CreatedOn { get; set; }
     }
 }

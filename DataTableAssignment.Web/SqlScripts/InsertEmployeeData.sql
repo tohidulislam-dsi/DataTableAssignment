@@ -4,10 +4,10 @@ CREATE OR ALTER PROCEDURE InsertEmployeeData
     @Office NVARCHAR(MAX),
     @Age INT,
     @Salary INT,
-    @Address NVARCHAR(MAX),
-    @PhoneNumber NVARCHAR(MAX),
-    @BenefitType NVARCHAR(MAX),
-    @BenefitValue INT,
+    @Address NVARCHAR(MAX) = NULL,
+    @PhoneNumber NVARCHAR(MAX) = NULL,
+    @BenefitType NVARCHAR(MAX) = NULL,
+    @BenefitValue INT = NULL,
     @EmployeeId UNIQUEIDENTIFIER OUTPUT -- Output parameter for EmployeeId
 AS
 BEGIN
@@ -28,18 +28,26 @@ BEGIN
         -- Retrieve the EmployeeId
         SELECT @EmployeeId = Id FROM @InsertedEmployee;
 
-        -- Insert into EmployeeDetails
-        INSERT INTO EmployeeDetails (EmployeeId, Address, PhoneNumber)
-        OUTPUT INSERTED.Id
-        VALUES (@EmployeeId, @Address, @PhoneNumber);
+        -- Insert into EmployeeDetails if Address or PhoneNumber is provided
+        IF @Address IS NOT NULL OR @PhoneNumber IS NOT NULL
+        BEGIN
+            DECLARE @InsertedEmployeeDetail TABLE (Id UNIQUEIDENTIFIER);
 
-        -- Insert into EmployeeBenefits
-        INSERT INTO EmployeeBenefits (EmployeeDetailId, BenefitType, BenefitValue)
-        VALUES (
-            (SELECT Id FROM EmployeeDetails WHERE EmployeeId = @EmployeeId),
-            @BenefitType,
-            @BenefitValue
-        );
+            INSERT INTO EmployeeDetails (EmployeeId, Address, PhoneNumber)
+            OUTPUT INSERTED.Id INTO @InsertedEmployeeDetail
+            VALUES (@EmployeeId, @Address, @PhoneNumber);
+
+            -- Retrieve the EmployeeDetailId
+            DECLARE @EmployeeDetailId UNIQUEIDENTIFIER;
+            SELECT @EmployeeDetailId = Id FROM @InsertedEmployeeDetail;
+
+            -- Insert into EmployeeBenefits if BenefitType or BenefitValue is provided
+            IF @BenefitType IS NOT NULL OR @BenefitValue IS NOT NULL
+            BEGIN
+                INSERT INTO EmployeeBenefits (EmployeeDetailId, BenefitType, BenefitValue)
+                VALUES (@EmployeeDetailId, @BenefitType, @BenefitValue);
+            END
+        END
 
         -- Commit the transaction
         COMMIT TRANSACTION;
