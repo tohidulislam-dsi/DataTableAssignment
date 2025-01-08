@@ -29,11 +29,15 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
     public async Task<Employee?> GetByIdAsync(Guid id)
     {
         var parameter = new SqlParameter("@EmployeeId", id);
-        var result = await dbContext.Set<EmployeeWithDetailsAndBenefits>()
-            .FromSqlRaw("EXEC GetEmployeeById @EmployeeId", parameter)
-            .ToListAsync();
-        var dto = result.FirstOrDefault();
-        var employee = mapper.Map<Employee>(dto);
+        var employee = dbContext.Employees.FromSqlRaw("EXEC GetEmployeeDetails @EmployeeId", parameter)
+            .Include(e => e.EmployeeDetails)
+            .ThenInclude(ed => ed.EmployeeBenefits)
+            .FirstOrDefault();
+        //var result = await dbContext.Set<EmployeeWithDetailsAndBenefits>()
+        //    .FromSqlRaw("EXEC GetEmployeeById @EmployeeId", parameter)
+        //    .ToListAsync();
+        //var dto = result.FirstOrDefault();
+        //var employee = mapper.Map<Employee>(dto);
         return employee;
     }
     public async Task<EmployeeDetails?> GetEmployeeDetailsByEmployeeIdAsync(Guid employeeId)
@@ -103,24 +107,45 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
 
     public async Task UpdateAsync(Employee employee)
     {
-        var parameters = new List<SqlParameter>
-        {
-            new SqlParameter("@EmployeeId", employee.Id),
-            new SqlParameter("@Name", employee.Name),
-            new SqlParameter("@Position", employee.Position),
-            new SqlParameter("@Office", employee.Office),
-            new SqlParameter("@Age", employee.Age),
-            new SqlParameter("@Salary", employee.Salary),
-            new SqlParameter("@Address", employee.EmployeeDetails.Address),
-            new SqlParameter("@PhoneNumber", employee.EmployeeDetails.PhoneNumber),
-            new SqlParameter("@BenefitType", employee.EmployeeDetails.EmployeeBenefits.BenefitType),
-            new SqlParameter("@BenefitValue", employee.EmployeeDetails.EmployeeBenefits.BenefitValue)
+        var benefitsTable = new DataTable();
+        benefitsTable.Columns.Add("BenefitId", typeof(Guid));
+        benefitsTable.Columns.Add("EmployeeDetailId", typeof(Guid));
+        benefitsTable.Columns.Add("BenefitType", typeof(string));
+        benefitsTable.Columns.Add("BenefitValue", typeof(int));
 
+        if (employee.EmployeeDetails?.EmployeeBenefits != null)
+        {
+            foreach (var benefit in employee.EmployeeDetails.EmployeeBenefits)
+            {
+                benefitsTable.Rows.Add(benefit.Id, benefit.EmployeeDetailId, benefit.BenefitType, benefit.BenefitValue);
+            }
+        }
+
+        var benefitsParameter = new SqlParameter
+        {
+            ParameterName = "@EmployeeBenefits",
+            SqlDbType = SqlDbType.Structured,
+            TypeName = "dbo.UpdateEmployeeBenefitType",
+            Value = benefitsTable
         };
 
+        var parameters = new List<SqlParameter>
+    {
+        new SqlParameter("@EmployeeId", employee.Id),
+        new SqlParameter("@Name", employee.Name),
+        new SqlParameter("@Position", employee.Position),
+        new SqlParameter("@Office", employee.Office),
+        new SqlParameter("@Age", employee.Age),
+        new SqlParameter("@Salary", employee.Salary),
+        new SqlParameter("@Address", (object)employee.EmployeeDetails?.Address ?? DBNull.Value),
+        new SqlParameter("@PhoneNumber", (object)employee.EmployeeDetails?.PhoneNumber ?? DBNull.Value),
+        benefitsParameter
+    };
+
         await dbContext.Database.ExecuteSqlRawAsync(
-            "EXEC UpdateEmployeeData @EmployeeId, @Name, @Position, @Office, @Age, @Salary, @Address, @PhoneNumber, @BenefitType, @BenefitValue", 
-            parameters);
+            "EXEC UpdateEmployeeData @EmployeeId, @Name, @Position, @Office, @Age, @Salary, @Address, @PhoneNumber, @EmployeeBenefits",
+            parameters
+        );
     }
 
     public async Task DeleteAsync(Guid id)

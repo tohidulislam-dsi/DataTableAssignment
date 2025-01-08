@@ -54,31 +54,28 @@
         <span asp-validation-for="EmployeeDetails.PhoneNumber" class="text-danger"></span>
     </div>
 
-    <div id="benefits-container">
+    @if (Model.EmployeeDetails?.EmployeeBenefits != null)
+    {
         @for (int i = 0; i < Model.EmployeeDetails.EmployeeBenefits.Count; i++)
         {
             <div class="form-group">
-                <label asp-for="EmployeeDetails.EmployeeBenefits[i].BenefitType" class="control-label"></label>
-                <input asp-for="EmployeeDetails.EmployeeBenefits[i].BenefitType" class="form-control" />
-                <span asp-validation-for="EmployeeDetails.EmployeeBenefits[i].BenefitType" class="text-danger"></span>
+                <label asp-for="EmployeeDetails.EmployeeBenefits[@i].BenefitType" class="control-label"></label>
+                <input asp-for="EmployeeDetails.EmployeeBenefits[@i].BenefitType" class="form-control" />
+                <span asp-validation-for="EmployeeDetails.EmployeeBenefits[@i].BenefitType" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="EmployeeDetails.EmployeeBenefits[i].BenefitValue" class="control-label"></label>
+                <label asp-for="EmployeeDetails.EmployeeBenefits[@i].BenefitValue" class="control-label"></label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">$</span>
                     </div>
-                    <input asp-for="EmployeeDetails.EmployeeBenefits[i].BenefitValue" class="form-control" />
+                    <input asp-for="EmployeeDetails.EmployeeBenefits[@i].BenefitValue" class="form-control" />
                 </div>
-                <span asp-validation-for="EmployeeDetails.EmployeeBenefits[i].BenefitValue" class="text-danger"></span>
+                <span asp-validation-for="EmployeeDetails.EmployeeBenefits[@i].BenefitValue" class="text-danger"></span>
             </div>
         }
-    </div>
-
-    <div class="form-group">
-        <button type="button" class="btn btn-secondary" onclick="addBenefit()">Add Benefit</button>
-    </div>
+    }
 
     <div class="form-group">
         <input type="submit" value="Submit" class="btn btn-primary" />
@@ -90,26 +87,4 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
-    <script>
-        function addBenefit() {
-            var index = $('#benefits-container .form-group').length / 2;
-            var benefitHtml = `
-                <div class="form-group">
-                    <label for="EmployeeDetails_EmployeeBenefits_${index}__BenefitType" class="control-label">Benefit Type</label>
-                    <input type="text" id="EmployeeDetails_EmployeeBenefits_${index}__BenefitType" name="EmployeeDetails.EmployeeBenefits[${index}].BenefitType" class="form-control" />
-                    <span class="text-danger field-validation-valid" data-valmsg-for="EmployeeDetails.EmployeeBenefits[${index}].BenefitType" data-valmsg-replace="true"></span>
-                </div>
-                <div class="form-group">
-                    <label for="EmployeeDetails_EmployeeBenefits_${index}__BenefitValue" class="control-label">Benefit Value</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
-                        </div>
-                        <input type="number" id="EmployeeDetails_EmployeeBenefits_${index}__BenefitValue" name="EmployeeDetails.EmployeeBenefits[${index}].BenefitValue" class="form-control" />
-                    </div>
-                    <span class="text-danger field-validation-valid" data-valmsg-for="EmployeeDetails.EmployeeBenefits[${index}].BenefitValue" data-valmsg-replace="true"></span>
-                </div>`;
-            $('#benefits-container').append(benefitHtml);
-        }
-    </script>
 }
