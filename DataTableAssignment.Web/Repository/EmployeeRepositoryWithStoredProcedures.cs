@@ -7,6 +7,8 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using AutoMapper;
 using DataTableAssignment.Web.Models.Enitites;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
 {
@@ -28,16 +30,27 @@ public class EmployeeRepositoryWithStoredProcedures : IEmployeeRepository
 
     public async Task<Employee?> GetByIdAsync(Guid id)
     {
-        var parameter = new SqlParameter("@EmployeeId", id);
-        var employee = dbContext.Employees.FromSqlRaw("EXEC GetEmployeeDetails @EmployeeId", parameter)
+        //var parameter = new SqlParameter("@EmployeeId", id);
+        ////var employee = dbContext.Employees.FromSqlRaw("EXEC GetEmployeeDetails @EmployeeId", parameter)
+        ////    .Include(e => e.EmployeeDetails)
+        ////    .ThenInclude(ed => ed.EmployeeBenefits)
+        ////    .FirstOrDefault();
+        ////var result = await dbContext.Set<EmployeeWithDetailsAndBenefits>()
+        ////    .FromSqlRaw("EXEC GetEmployeeById @EmployeeId", parameter)
+        ////    .ToListAsync();
+        ////var dto = result.FirstOrDefault();
+        ////var employee = mapper.Map<Employee>(dto);
+        //var employeeList = await _context.Employees
+        //.FromSqlRaw("EXEC GetEmployeeById @EmployeeId", parameter))
+        //.ToListAsync();
+        //var jsonResult = await dbContext.Database.ExecuteSqlRawAsync("EXEC GetEmployeeById @EmployeeId", parameter);
+        //var employee = JsonConvert.DeserializeObject<Employee>(jsonResult);
+
+        //return employee;
+        var employee = await dbContext.Employees
             .Include(e => e.EmployeeDetails)
             .ThenInclude(ed => ed.EmployeeBenefits)
-            .FirstOrDefault();
-        //var result = await dbContext.Set<EmployeeWithDetailsAndBenefits>()
-        //    .FromSqlRaw("EXEC GetEmployeeById @EmployeeId", parameter)
-        //    .ToListAsync();
-        //var dto = result.FirstOrDefault();
-        //var employee = mapper.Map<Employee>(dto);
+            .FirstOrDefaultAsync(e => e.Id == id);
         return employee;
     }
     public async Task<EmployeeDetails?> GetEmployeeDetailsByEmployeeIdAsync(Guid employeeId)

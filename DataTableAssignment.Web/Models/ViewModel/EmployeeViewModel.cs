@@ -20,7 +20,12 @@ namespace DataTableAssignment.Web.Models.ViewModel
         [Required(ErrorMessage = "This field is required")]
         [Range(0, int.MaxValue, ErrorMessage = "Salary cannot be negative")]
         public int Salary { get; set; }
-        public EmployeeDetailViewModel? EmployeeDetails { get; set; }
+        public EmployeeDetailViewModel EmployeeDetails { get; set; }
+
+        public EmployeeViewModel()
+        {
+            EmployeeDetails = new EmployeeDetailViewModel();
+        }
 
     }
 }

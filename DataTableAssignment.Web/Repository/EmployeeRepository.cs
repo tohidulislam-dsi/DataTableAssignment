@@ -6,6 +6,9 @@ using DataTableAssignment.Web.Models.Dto;
 using AutoMapper;
 using System.Text.Json;
 using System;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
+
 public class EmployeeRepository : IEmployeeRepository
 {
     private readonly DataTableAssignmentDbContext dbContext;
@@ -24,11 +27,11 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<Employee?> GetByIdAsync(Guid id)
     {
-        return await dbContext.Employees
-        .Include(e => e.EmployeeDetails)
-        .ThenInclude(ed => ed.EmployeeBenefits)
-        .FirstOrDefaultAsync(e => e.Id == id);
-
+        var employee = await dbContext.Employees
+            .Include(e => e.EmployeeDetails)
+            .ThenInclude(ed => ed.EmployeeBenefits)
+            .FirstOrDefaultAsync(e => e.Id == id);
+        return employee;
     }
 
     public async Task<EmployeeDetails?> GetEmployeeDetailsByEmployeeIdAsync(Guid employeeId)
@@ -39,7 +42,6 @@ public class EmployeeRepository : IEmployeeRepository
     public async Task<EmployeeBenefits?> GetEmployeeBenefitsByEmployeeDetailsIdASync(Guid employeeDetailsId)
     {
         return await dbContext.EmployeeBenefits.FirstOrDefaultAsync(ed => ed.EmployeeDetailId == employeeDetailsId);
-
     }
 
     public async Task<Guid> AddAsync(Employee employee)
@@ -48,7 +50,6 @@ public class EmployeeRepository : IEmployeeRepository
         await dbContext.SaveChangesAsync();
 
         return employee.Id;
-        
     }
 
     public async Task UpdateAsync(Employee employee)
@@ -58,10 +59,44 @@ public class EmployeeRepository : IEmployeeRepository
             .ThenInclude(ed => ed.EmployeeBenefits)
             .FirstOrDefaultAsync(e => e.Id == employee.Id);
 
-        mapper.Map(employee, existingEmployee);       
-        
-        await dbContext.SaveChangesAsync();
+        if (existingEmployee != null)
+        {
+            UpdateNonNullProperties(existingEmployee, employee);
 
+            await dbContext.SaveChangesAsync();
+        }
+    }
+
+    private void UpdateNonNullProperties(object existingEntity, object newEntity)
+    {
+        var properties = existingEntity.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (var property in properties)
+        {
+            if (property.GetCustomAttribute<KeyAttribute>() != null)
+            {
+                continue; // Skip key properties
+            }
+
+            var newValue = property.GetValue(newEntity);
+            if (newValue != null)
+            {
+                if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
+                {
+                    var existingValue = property.GetValue(existingEntity);
+                    if (existingValue == null)
+                    {
+                        existingValue = Activator.CreateInstance(property.PropertyType);
+                        property.SetValue(existingEntity, existingValue);
+                    }
+                    UpdateNonNullProperties(existingValue, newValue);
+                }
+                else
+                {
+                    property.SetValue(existingEntity, newValue);
+                }
+            }
+        }
     }
 
     public async Task DeleteAsync(Guid id)
@@ -73,10 +108,12 @@ public class EmployeeRepository : IEmployeeRepository
             await dbContext.SaveChangesAsync();
         }
     }
+
     public async Task<int> GetTotalEmployeeCountAsync()
     {
         return await dbContext.Employees.CountAsync();
     }
+
     public async Task<EmployeeFilterResultDto<Employee>> GetFilteredEmployeesAsync(EmployeeListRequestModel requestData)
     {
         var query = dbContext.Employees.AsQueryable();
@@ -84,7 +121,6 @@ public class EmployeeRepository : IEmployeeRepository
 
         // Global search filter
         if (!string.IsNullOrEmpty(requestData.Search.Value))
-
         {
             var globalSearchValue = requestData.Search.Value.ToLower();
             query = query.Where(x => x.Name.ToLower().Contains(globalSearchValue) ||
@@ -123,9 +159,7 @@ public class EmployeeRepository : IEmployeeRepository
         int start = (int)requestData.Start;
         int length = (int)requestData.Length;
 
-
         // Sorting
-
         if (requestData.Order != null && requestData.Order.Count > 0)
         {
             var ordering = string.Join(", ", requestData.Order.Select(o =>
@@ -138,8 +172,6 @@ public class EmployeeRepository : IEmployeeRepository
         }
 
         var totalFilteredRecords = await query.CountAsync();
-        
-
 
         // Paging
         query = query.Skip(start).Take(length);
@@ -150,8 +182,6 @@ public class EmployeeRepository : IEmployeeRepository
             recordsFiltered = totalFilteredRecords,
             recordsTotal = totalEmployees
         };
-        
     }
-
 }
 

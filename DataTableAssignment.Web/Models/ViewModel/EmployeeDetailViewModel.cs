@@ -4,6 +4,7 @@ namespace DataTableAssignment.Web.Models.ViewModel
 {
     public class EmployeeDetailViewModel
     {
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "This field is required")]
         public string Address { get; set; }
         [Required(ErrorMessage = "This field is required")]

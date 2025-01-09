@@ -4,12 +4,13 @@ using DataTableAssignment.Web.Models.Dto;
 using DataTableAssignment.Web.Models.Response;
 using DataTableAssignment.Web.Models.ViewModel;
 using DataTableAssignment.Web.Models.Enitites;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace DataTableAssignment.Web.Mapping
 {
     public class AutomapperProfiles : Profile
     {
+       
         public AutomapperProfiles()
         {
             // Mapping from Employee to EmployeeDto
@@ -35,14 +36,32 @@ namespace DataTableAssignment.Web.Mapping
 
             // Mapping from EmployeeViewModel to EmployeeDto
             CreateMap<EmployeeViewModel, EmployeeDto>()
-                .ForMember(dest => dest.EmployeeDetailsDto, opt => opt.MapFrom(src => src.EmployeeDetails));
+                .ForMember(dest => dest.EmployeeDetailsDto, opt => opt.MapFrom(src => src.EmployeeDetails))
+                .AfterMap((src, dest) =>
+                {
+                    dest.EmployeeDetailsDto.EmployeeId = src.Id;
+                    if (dest.EmployeeDetailsDto.EmployeeBenefitsDto != null)
+                    {
+                        foreach (var benefit in dest.EmployeeDetailsDto.EmployeeBenefitsDto)
+                        {
+                            benefit.EmployeeDetailId = src.EmployeeDetails.Id;
+                        }
+                    }
+                });
 
-            // Mapping from EmployeeDetailsViewModel to EmployeeDetailsDto
+            // Mapping from EmployeeDetailViewModel to EmployeeDetailsDto
             CreateMap<EmployeeDetailViewModel, EmployeeDetailsDto>()
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.EmployeeBenefitsDto, opt => opt.MapFrom(src => src.EmployeeBenefits));
 
             // Mapping from EmployeeBenefitsViewModel to EmployeeBenefitsDto
-            CreateMap<EmployeeBenefitsViewModel, EmployeeBenefitsDto>();
+            CreateMap<EmployeeBenefitsViewModel, EmployeeBenefitsDto>()
+                .ForMember(dest => dest.EmployeeDetailId, opt => opt.MapFrom(src => src.Id));
+
+
+
+
+
             CreateMap<EmployeeDetailsDto, EmployeeDetailViewModel>();
 
 
@@ -104,30 +123,36 @@ namespace DataTableAssignment.Web.Mapping
             // Map EmployeeDto to Employee
             CreateMap<EmployeeWithDetailsAndBenefits, Employee>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EmployeeId))
-                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.EmployeeCreatedOn))
                 .ForMember(dest => dest.EmployeeDetails, opt => opt.MapFrom(src => src));
 
-            // Map EmployeeDto to EmployeeDetails
             CreateMap<EmployeeWithDetailsAndBenefits, EmployeeDetails>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EmployeeDetailsId ?? Guid.Empty))
-                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.EmployeeDetailsCreatedOn))
-                .ForMember(dest => dest.EmployeeBenefits, opt => opt.MapFrom(src =>
-                    string.IsNullOrEmpty(src.EmployeeBenefits)
-                        ? new List<EmployeeBenefits>()
-                        : JsonConvert.DeserializeObject<List<EmployeeBenefits>>(src.EmployeeBenefits)));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EmployeeDetailsId))
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+                .ForMember(dest => dest.EmployeeBenefits, opt => opt.MapFrom(src => ParseEmployeeBenefits(src.EmployeeBenefits)));
 
-            // Map EmployeeBenefits JSON string to a collection
-            CreateMap<string, List<EmployeeBenefits>>()
-                .ConvertUsing(json => string.IsNullOrEmpty(json)
-                    ? new List<EmployeeBenefits>()
-                    : JsonConvert.DeserializeObject<List<EmployeeBenefits>>(json));
+            CreateMap<EmployeeBenefits, EmployeeBenefits>(); // For JSON deserialization into EmployeeBenefits objects.
+
 
             CreateMap<EmployeeDetailsDto, EmployeeDetailViewModel>()
                 .ForMember(dest => dest.EmployeeBenefits, opt => opt.MapFrom(src => src.EmployeeBenefitsDto));
             CreateMap<EmployeeBenefitsDto, EmployeeBenefitsViewModel>();
+           
 
+        }
+        private static ICollection<EmployeeBenefits> ParseEmployeeBenefits(string employeeBenefitsJson)
+        {
+            if (string.IsNullOrEmpty(employeeBenefitsJson))
+                return new List<EmployeeBenefits>();
+
+            try
+            {
+                return JsonSerializer.Deserialize<List<EmployeeBenefits>>(employeeBenefitsJson) ?? new List<EmployeeBenefits>();
+            }
+            catch
+            {
+                // Handle invalid JSON if needed
+                return new List<EmployeeBenefits>();
+            }
         }
     }
 }

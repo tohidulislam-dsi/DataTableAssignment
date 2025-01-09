@@ -5,10 +5,9 @@ CREATE OR ALTER PROCEDURE UpdateEmployeeData
     @Office NVARCHAR(MAX),
     @Age INT,
     @Salary INT,
-    @Address NVARCHAR(MAX),
-    @PhoneNumber NVARCHAR(MAX),
-    @BenefitType NVARCHAR(MAX),
-    @BenefitValue INT
+    @Address NVARCHAR(MAX) = NULL,
+    @PhoneNumber NVARCHAR(MAX) = NULL,
+    @EmployeeBenefits UpdateEmployeeBenefitType READONLY -- Table-valued parameter for EmployeeBenefits
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -27,22 +26,52 @@ BEGIN
             Salary = @Salary
         WHERE Id = @EmployeeId;
 
+        -- Update EmployeeDetails table if Address or PhoneNumber is provided
+        IF @Address IS NOT NULL OR @PhoneNumber IS NOT NULL
+        BEGIN
+            DECLARE @EmployeeDetailIdTable TABLE (Id UNIQUEIDENTIFIER);
 
-        -- Update EmployeeDetails table
-        UPDATE dbo.EmployeeDetails
-        SET
-            Address = @Address,
-            PhoneNumber = @PhoneNumber
-        WHERE EmployeeId = @EmployeeId;
+            -- Check if EmployeeDetails exists
+            IF EXISTS (SELECT 1 FROM EmployeeDetails WHERE EmployeeId = @EmployeeId)
+            BEGIN
+                -- Update existing EmployeeDetails
+                UPDATE EmployeeDetails
+                SET
+                    Address = ISNULL(@Address, Address),
+                    PhoneNumber = ISNULL(@PhoneNumber, PhoneNumber)
+                WHERE EmployeeId = @EmployeeId;
 
-        -- Update EmployeeBenefits table using join for efficiency
-        UPDATE eb
-        SET
-            eb.BenefitType = @BenefitType,
-            eb.BenefitValue = @BenefitValue
-        FROM dbo.EmployeeBenefits eb
-        JOIN dbo.EmployeeDetails ed ON eb.EmployeeDetailId = ed.Id
-        WHERE ed.EmployeeId = @EmployeeId;
+                -- Retrieve the EmployeeDetailId
+                INSERT INTO @EmployeeDetailIdTable (Id)
+                SELECT Id FROM EmployeeDetails WHERE EmployeeId = @EmployeeId;
+            END
+            ELSE
+            BEGIN
+                -- Insert new EmployeeDetails and capture the new EmployeeDetailId
+                INSERT INTO EmployeeDetails (EmployeeId, Address, PhoneNumber)
+                OUTPUT INSERTED.Id INTO @EmployeeDetailIdTable
+                VALUES (@EmployeeId, @Address, @PhoneNumber);
+            END
+
+            -- Get the EmployeeDetailId from the table variable
+            DECLARE @EmployeeDetailId UNIQUEIDENTIFIER;
+            SELECT @EmployeeDetailId = Id FROM @EmployeeDetailIdTable;
+
+            -- Merge EmployeeBenefits if any benefits are provided
+            IF EXISTS (SELECT 1 FROM @EmployeeBenefits)
+            BEGIN
+                MERGE EmployeeBenefits AS target
+                USING @EmployeeBenefits AS source
+                ON target.EmployeeDetailId = @EmployeeDetailId AND target.Id = source.BenefitId
+                WHEN MATCHED THEN
+                    UPDATE SET
+                        BenefitType = source.BenefitType,
+                        BenefitValue = source.BenefitValue
+                WHEN NOT MATCHED BY TARGET THEN
+                    INSERT (EmployeeDetailId, BenefitType, BenefitValue)
+                    VALUES (@EmployeeDetailId, source.BenefitType, source.BenefitValue);
+            END
+        END
 
         -- Commit the transaction
         COMMIT TRANSACTION;
