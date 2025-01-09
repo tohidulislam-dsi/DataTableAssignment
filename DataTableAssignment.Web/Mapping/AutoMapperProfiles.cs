@@ -67,17 +67,16 @@ namespace DataTableAssignment.Web.Mapping
 
             // Mapping from EmployeeDto to Employee
             CreateMap<EmployeeDto, Employee>()
-                .ForMember(dest => dest.EmployeeDetails, opt => opt.MapFrom(src => src.EmployeeDetailsDto))
-                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore());
+                .ForMember(dest => dest.EmployeeDetails, opt => opt.MapFrom(src => src.EmployeeDetailsDto));
+
 
             // Mapping from EmployeeDetailsDto to EmployeeDetails
             CreateMap<EmployeeDetailsDto, EmployeeDetails>()
-                .ForMember(dest => dest.EmployeeBenefits, opt => opt.MapFrom(src => src.EmployeeBenefitsDto))
-                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore());
+                .ForMember(dest => dest.EmployeeBenefits, opt => opt.MapFrom(src => src.EmployeeBenefitsDto));
 
             // Mapping from EmployeeBenefitsDto to EmployeeBenefits
-            CreateMap<EmployeeBenefitsDto, EmployeeBenefits>()
-                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore());
+            CreateMap<EmployeeBenefitsDto, EmployeeBenefits>();
+                
 
 
 
